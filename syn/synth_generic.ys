@@ -1,0 +1,38 @@
+# ============================================================
+#  Generic synthesis - scrambler_apb
+#  Run from the syn/ directory:
+#     yosys -l reports/synth.log synth_generic.ys
+# ============================================================
+
+# ---- 1. Read RTL -------------------------------------------------------
+read_verilog -sv ../RTL/scrambler_core.sv
+read_verilog -sv ../RTL/descrambler_core.sv
+read_verilog -sv ../RTL/scrambler_top.sv
+read_verilog -sv ../RTL/scrambler_apb.sv
+
+# ---- 2. Elaborate ------------------------------------------------------
+hierarchy -check -top scrambler_apb
+
+# ---- 3. Synthesise (hierarchy preserved) -------------------------------
+synth -nofsm -top scrambler_apb
+check -assert
+
+# Per-module cost breakdown while module boundaries still exist
+tee -o reports/stat_hier.txt stat
+
+# ---- 4. Flatten and re-optimise for the true gate count ----------------
+flatten
+opt -full
+techmap
+opt -full
+abc -g AND,NAND,OR,NOR,XOR,XNOR,MUX
+opt_clean
+
+tee -o reports/stat_flat.txt stat
+
+# Longest combinational path = logic depth, the proxy for critical path
+tee -o reports/ltp.txt ltp -noff
+
+# ---- 5. Write outputs --------------------------------------------------
+write_verilog -noattr netlist/scrambler_apb_netlist.v
+write_json netlist/scrambler_apb.json

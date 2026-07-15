@@ -1,0 +1,15 @@
+# Synthesis / simulation generated artifacts
+syn/netlist/
+*.vcd
+*.fst
+*.out
+*.vvp
+work/
+slpp_all/
+
+# Editor / OS
+.obsidian/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

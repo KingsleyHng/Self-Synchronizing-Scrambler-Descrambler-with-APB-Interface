@@ -1,0 +1,48 @@
+read_verilog -sv ../RTL/scrambler_core.sv
+read_verilog -sv ../RTL/descrambler_core.sv
+read_verilog -sv ../RTL/scrambler_top.sv
+read_verilog -sv ../RTL/scrambler_apb.sv
+
+hierarchy -check -top scrambler_apb
+prep -flatten -top scrambler_apb
+
+design -stash gold
+
+
+read_verilog -sv ../RTL/scrambler_core.sv
+read_verilog -sv ../RTL/descrambler_core.sv
+read_verilog -sv ../RTL/scrambler_top.sv
+read_verilog -sv ../RTL/scrambler_apb.sv
+
+hierarchy -check -top scrambler_apb
+
+# 这一段必须和 synth_generic.ys 的流程逐字一致,
+# 否则"验证的网表"就不是"交付的网表"。
+synth -nofsm -top scrambler_apb
+flatten
+opt -full
+techmap
+opt -full
+abc -g AND,NAND,OR,NOR,XOR,XNOR,MUX
+opt_clean
+
+design -stash gate
+
+
+design -copy-from gold -as gold scrambler_apb
+design -copy-from gate -as gate scrambler_apb
+
+
+async2sync
+
+# ---- 步骤 5:造 equiv 模块,然后证明 --------------------------
+# blacklist 排除 non_zero_ok:ABC 的 don't-care 优化让这个内部点
+# 无法逐位对应,但所有输出端口仍被完整证明。详见指南第 7.6 节。
+equiv_make -blacklist equiv_blacklist.txt gold gate equiv
+hierarchy -top equiv
+
+equiv_simple -seq 5
+equiv_induct -seq 5
+
+log ================ EQUIVALENCE RESULT ================
+tee -o reports/equiv_status.txt equiv_status -assert
