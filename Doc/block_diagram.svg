@@ -1,0 +1,184 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 830" width="1480" height="830" font-family="Inter, 'Segoe UI', Helvetica, Arial, sans-serif">
+
+<defs>
+  <style>
+    .t-title   { font-size: 26px; font-weight: 700; fill: #0f172a; }
+    .t-sub     { font-size: 13px; fill: #64748b; }
+    .t-pill    { font-size: 12px; fill: #334155; font-family: 'SF Mono', Consolas, 'Courier New', monospace; }
+    .t-tab     { font-size: 12.5px; font-weight: 700; fill: #ffffff; }
+    .t-blk     { font-size: 13.5px; font-weight: 700; }
+    .t-blk-sub { font-size: 10px; font-style: italic; fill: #64748b; }
+    .t-mono    { font-size: 10px; font-family: 'SF Mono', Consolas, 'Courier New', monospace; }
+    .t-port    { font-size: 11px; font-family: 'SF Mono', Consolas, 'Courier New', monospace; fill: #1e293b; }
+    .t-grp     { font-size: 10px; font-weight: 700; fill: #94a3b8; letter-spacing: 1.2px; }
+    .t-wire    { font-size: 9.5px; font-family: 'SF Mono', Consolas, 'Courier New', monospace; fill: #475569; }
+    .t-ctl     { font-size: 9.5px; font-family: 'SF Mono', Consolas, 'Courier New', monospace; fill: #b45309; }
+    .t-sta     { font-size: 9.5px; font-family: 'SF Mono', Consolas, 'Courier New', monospace; fill: #b91c1c; }
+    .t-note    { font-size: 10px; font-style: italic; fill: #64748b; }
+    .t-lg      { font-size: 10.5px; fill: #475569; }
+
+    .wire      { stroke: #334155; stroke-width: 1.5; fill: none; }
+    .bus       { stroke: #334155; stroke-width: 2.4; fill: none; }
+    .ctlwire   { stroke: #d97706; stroke-width: 1.7; fill: none; stroke-dasharray: 6 4; }
+    .stawire   { stroke: #dc2626; stroke-width: 1.7; fill: none; stroke-dasharray: 3 3; }
+  </style>
+
+  <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+  </marker>
+  <marker id="ah-ctl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="#d97706"/>
+  </marker>
+  <marker id="ah-sta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+  </marker>
+</defs>
+
+<rect x="0" y="0" width="1480" height="830" fill="#ffffff"/>
+
+<!-- HEADER -->
+<text class="t-title" x="40" y="46">Self-Synchronizing Scrambler / Descrambler IP</text>
+<text class="t-sub"   x="40" y="72">AMBA APB peripheral &#183; parametrized multiplicative LFSR</text>
+<rect x="1058" y="26" width="382" height="32" rx="16" fill="#f1f5f9" stroke="#cbd5e1"/>
+<text class="t-pill" x="1249" y="47" text-anchor="middle">N = 58 &#183; W = 8 &#183; TAP_A = 39 &#183; TAP_B = 58</text>
+<line x1="40" y1="90" x2="1440" y2="90" stroke="#e2e8f0" stroke-width="1.5"/>
+
+<!-- ===== BLOCKS (drawn first, wires paint on top) ===== -->
+<rect x="200" y="108" width="1100" height="662" rx="10" fill="#f8fafc" stroke="#0f172a" stroke-width="2.5"/>
+<rect x="236" y="360" width="1034" height="380" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="2"/>
+
+<rect x="236" y="200" width="194" height="120" rx="8" fill="#e0edfb" stroke="#2563eb" stroke-width="1.8"/>
+<rect x="266" y="396" width="184" height="134" rx="8" fill="#fef3c7" stroke="#b45309" stroke-width="1.8"/>
+<rect x="500" y="430" width="90"  height="280" rx="8" fill="#e2e8f0" stroke="#475569" stroke-width="1.8"/>
+<rect x="640" y="396" width="350" height="134" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+<rect x="640" y="580" width="350" height="130" rx="8" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"/>
+<path d="M 1040 430 L 1130 468 L 1130 672 L 1040 710 Z" fill="#e2e8f0" stroke="#475569" stroke-width="1.8"/>
+
+<!-- ===== WIRES ===== -->
+<!-- clk / rst_n -->
+<line class="wire" x1="150" y1="150" x2="222" y2="150" marker-end="url(#ah)"/>
+<circle cx="222" cy="150" r="3.2" fill="#334155"/>
+
+<!-- APB bidirectional bus -->
+<path class="bus" d="M 190 262 L 236 262" marker-start="url(#ah)" marker-end="url(#ah)"/>
+
+<!-- CSR bus between APB FSM and scrambler_top -->
+<path class="bus" d="M 270 320 L 270 396" marker-end="url(#ah)"/>
+<path class="bus" d="M 420 396 L 420 320" marker-end="url(#ah)"/>
+
+<!-- stream in -> mode router -->
+<line class="wire" x1="190" y1="620" x2="500" y2="620" marker-end="url(#ah)"/>
+<line class="wire" x1="190" y1="642" x2="500" y2="642" marker-end="url(#ah)"/>
+<line class="bus"  x1="190" y1="664" x2="500" y2="664" marker-end="url(#ah)"/>
+
+<!-- router -> cores -->
+<line class="bus" x1="590" y1="460" x2="640" y2="460" marker-end="url(#ah)"/>
+<line class="bus" x1="590" y1="640" x2="640" y2="640" marker-end="url(#ah)"/>
+
+<!-- cores -> output select -->
+<line class="bus" x1="990" y1="460" x2="1040" y2="460" marker-end="url(#ah)"/>
+<line class="bus" x1="990" y1="640" x2="1040" y2="640" marker-end="url(#ah)"/>
+
+<!-- bypass: router -> output select -->
+<path class="bus" d="M 590 545 L 1040 545" marker-end="url(#ah)"/>
+
+<!-- loopback: scrambled output back into the router -->
+<path class="bus" d="M 1010 460 L 1010 568 L 590 568" marker-end="url(#ah)"/>
+<circle cx="1010" cy="460" r="3.4" fill="#334155"/>
+
+<!-- output -->
+<line class="bus"  x1="1130" y1="560" x2="1310" y2="560" marker-end="url(#ah)"/>
+<line class="wire" x1="1130" y1="590" x2="1310" y2="590" marker-end="url(#ah)"/>
+
+<!-- control lane: CSR -> both cores -->
+<path class="ctlwire" d="M 350 396 L 350 380 L 1160 380"/>
+<circle cx="350" cy="396" r="3.2" fill="#d97706"/>
+<path class="ctlwire" d="M 900 380 L 900 396" marker-end="url(#ah-ctl)"/>
+<circle cx="900" cy="380" r="3.2" fill="#d97706"/>
+<path class="ctlwire" d="M 1160 380 L 1160 690 L 990 690" marker-end="url(#ah-ctl)"/>
+
+<!-- status: cores -> CSR -->
+<path class="stawire" d="M 640 420 L 450 420" marker-end="url(#ah-sta)"/>
+<path class="stawire" d="M 700 710 L 700 725 L 430 725 L 430 530" marker-end="url(#ah-sta)"/>
+
+<!-- ===== BLOCK LABELS ===== -->
+<rect x="218" y="94" width="286" height="28" rx="14" fill="#0f172a"/>
+<text class="t-tab" x="236" y="113">scrambler_apb  &#183;  APB slave</text>
+<rect x="950" y="346" width="320" height="28" rx="14" fill="#1d4ed8"/>
+<text class="t-tab" x="968" y="365">scrambler_top  &#183;  mode mux + CSR</text>
+
+<text class="t-blk"  x="252" y="228" fill="#1e3a8a">APB FSM</text>
+<text class="t-mono" x="252" y="254" fill="#1e40af">IDLE &#8594; SETUP &#8594; ACCESS</text>
+<text class="t-mono" x="252" y="274" fill="#1e40af">pready = 1'b1 (zero wait)</text>
+<text class="t-mono" x="252" y="296" fill="#1e40af">prdata = csr_rdata</text>
+
+<text class="t-blk"  x="282" y="424" fill="#78350f">CSR Register File</text>
+<text class="t-mono" x="282" y="450" fill="#78350f">mode, ctrl_en</text>
+<text class="t-mono" x="282" y="468" fill="#78350f">seed[57:0], seed_load</text>
+<text class="t-mono" x="282" y="486" fill="#78350f">test_period, test_en</text>
+<text class="t-mono" x="282" y="508" fill="#92400e">status read-back</text>
+
+<text class="t-blk"     x="545" y="478" fill="#1e293b" text-anchor="middle">Mode</text>
+<text class="t-blk"     x="545" y="496" fill="#1e293b" text-anchor="middle">Router</text>
+<text class="t-blk-sub" x="545" y="506" text-anchor="middle">4:1</text>
+<text class="t-wire" x="545" y="536" text-anchor="middle">BYPASS</text>
+<text class="t-wire" x="545" y="552" text-anchor="middle">SCRAMBLE</text>
+<text class="t-wire" x="545" y="568" text-anchor="middle">DESCRAMBLE</text>
+<text class="t-wire" x="545" y="584" text-anchor="middle">LOOPBACK</text>
+<text class="t-mono" x="545" y="686" fill="#334155" text-anchor="middle">en = ext_en</text>
+<text class="t-mono" x="545" y="700" fill="#334155" text-anchor="middle">&amp; ctrl_en</text>
+
+<text class="t-blk"     x="660" y="424" fill="#14532d">scrambler_core &#8212; TX</text>
+<text class="t-blk-sub" x="660" y="440">multiplicative / feedback</text>
+<text class="t-mono" x="660" y="468" fill="#14532d">state[57:0] LFSR + 2-level XOR</text>
+<text class="t-mono" x="660" y="488" fill="#14532d">state &#8656; scrambled OUT  (feedback)</text>
+<text class="t-mono" x="660" y="512" fill="#166534">resets to all-ones &#183; zero seed rejected</text>
+
+<text class="t-blk"     x="660" y="608" fill="#4c1d95">descrambler_core &#8212; RX</text>
+<text class="t-blk-sub" x="660" y="624">mirrored / feed-forward</text>
+<text class="t-mono" x="660" y="652" fill="#4c1d95">state[57:0] LFSR + 2-level XOR</text>
+<text class="t-mono" x="660" y="672" fill="#4c1d95">state &#8656; RECEIVED din  (no feedback)</text>
+<text class="t-mono" x="660" y="696" fill="#5b21b6">locked after ceil(N/W) = 8 valid words</text>
+
+<text class="t-blk"     x="1085" y="556" fill="#1e293b" text-anchor="middle">Output</text>
+<text class="t-blk"     x="1085" y="574" fill="#1e293b" text-anchor="middle">Select</text>
+<text class="t-blk-sub" x="1085" y="592" text-anchor="middle">by mode</text>
+
+<!-- ===== PORT / WIRE LABELS ===== -->
+<text class="t-port" x="10" y="154">clk / rst_n</text>
+<text class="t-note" x="230" y="146">&#8594; all blocks</text>
+
+<text class="t-grp"  x="10" y="236">APB  SLAVE</text>
+<text class="t-port" x="10" y="258">psel, penable, pwrite,</text>
+<text class="t-port" x="10" y="274">paddr, pwdata, prdata,</text>
+<text class="t-port" x="10" y="290">pready, pslverr</text>
+
+<text class="t-grp"  x="10" y="598">STREAM  IN</text>
+<text class="t-port" x="10" y="624">ext_en</text>
+<text class="t-port" x="10" y="646">din_valid</text>
+<text class="t-port" x="10" y="668">din[7:0]</text>
+
+<text class="t-grp"  x="1318" y="534">STREAM  OUT</text>
+<text class="t-port" x="1318" y="564">dout[7:0]</text>
+<text class="t-port" x="1318" y="594">dout_valid</text>
+
+<text class="t-wire" x="282" y="344">csr_wr / addr / wdata</text>
+<text class="t-wire" x="432" y="344" fill="#1e40af">csr_rdata[31:0]</text>
+
+<text class="t-ctl"  x="420" y="374">mode, ctrl_en, seed, seed_load, err_clr, parity_clr, force_rst</text>
+<text class="t-sta"  x="462" y="414">allzero_err, parity_err, state</text>
+<text class="t-sta"  x="440" y="721">locked, parity_err, state</text>
+
+<text class="t-wire" x="700" y="539">din / din_valid   (BYPASS)</text>
+<text class="t-wire" x="700" y="562">scr_dout &#8594; des_din   (LOOPBACK)</text>
+
+<!-- ===== LEGEND ===== -->
+<line class="bus" x1="204" y1="800" x2="244" y2="800"/>
+<text class="t-lg" x="252" y="804">data path</text>
+<line class="ctlwire" x1="356" y1="800" x2="396" y2="800"/>
+<text class="t-lg" x="404" y="804">control / CSR</text>
+<line class="stawire" x1="520" y1="800" x2="560" y2="800"/>
+<text class="t-lg" x="568" y="804">status / flags</text>
+<text class="t-lg" x="700" y="804">A crossing without a junction dot is not a connection. clk / rst_n reach every block.</text>
+
+</svg>
