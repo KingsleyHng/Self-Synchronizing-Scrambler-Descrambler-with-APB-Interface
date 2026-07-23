@@ -1,5 +1,5 @@
 `default_nettype none
-`define SVA
+
 
 module scrambler_top #(
     parameter int N = 58, // state register length
@@ -379,7 +379,7 @@ endproperty
 LOOPBACK_DOUT_EQUAL_DOUT_A: assert property(LOOPBACK_DOUT_EQUAL_DOUT)
   else $error("LOOPBACK_DOUT_EQUAL_DOUT: loopback failed to restore | dout=0x%0h expected(din-2)=0x%0h", $sampled(dout), $past(din,2));
 
-// 确认 loopback 真的产出过有效输出(否则上面那条会 vacuous pass)
+
 property LOOPBACK_DOUT_SEEN;
     @(posedge clk) disable iff(!rst_n)
         (mode == MODE_LOOPBACK && dout_valid);

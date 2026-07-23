@@ -1,5 +1,5 @@
 `default_nettype none
-`define SVA
+
 
 
 module scrambler_core #(
@@ -244,7 +244,7 @@ endproperty
 FORCED_RST_DOUT_VALID_SCR_A: assert property (FORCED_RST_DOUT_VALID_SCR)
   else $error("FORCED_RST_DOUT_VALID_SCR: stale word leaked after force_rst | dout_valid=%0b dout=0x%0h", $sampled(dout_valid), $sampled(dout));
 
-// 确认"漏字场景"真的被激励到: force_rst 与一次采样(en&din_valid)同拍发生
+
 property FORCED_RST_WHILE_CAPTURING_SCR;
   @(posedge clk) disable iff(!rst_n)
     force_rst && en && din_valid;

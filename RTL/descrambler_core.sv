@@ -1,5 +1,5 @@
 `default_nettype none
-`define SVA
+
 
 module descrambler_core #(
     parameter int N         = 58,  // LFSR length
