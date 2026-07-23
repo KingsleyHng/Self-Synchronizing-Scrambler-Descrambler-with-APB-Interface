@@ -1,4 +1,6 @@
 `default_nettype none
+`define SVA
+
 
 module scrambler_core #(
     parameter int N         = 58,  // LFSR length
@@ -91,6 +93,12 @@ module scrambler_core #(
       dout_tmp <= '0;
       dout_valid <= 1'b0;
     end
+
+    else if(force_rst)begin
+      dout_tmp <= '0;
+      dout_valid <= 1'b0;
+    end
+
     else if (en && din_valid) begin
       dout_tmp <= scrambler_out;
       dout_valid <= 1'b1;
@@ -224,6 +232,29 @@ module scrambler_core #(
   // Observation / status outputs
   // --------------------------------------------------------------------------
   assign state_o    = state;
+
+
+//SVA
+`ifdef SVA
+property FORCED_RST_DOUT_VALID_SCR;
+  @(posedge clk) disable iff(!rst_n)
+    (force_rst) |=> !dout_valid;
+endproperty
+
+FORCED_RST_DOUT_VALID_SCR_A: assert property (FORCED_RST_DOUT_VALID_SCR)
+  else $error("FORCED_RST_DOUT_VALID_SCR: stale word leaked after force_rst | dout_valid=%0b dout=0x%0h", $sampled(dout_valid), $sampled(dout));
+
+// 确认"漏字场景"真的被激励到: force_rst 与一次采样(en&din_valid)同拍发生
+property FORCED_RST_WHILE_CAPTURING_SCR;
+  @(posedge clk) disable iff(!rst_n)
+    force_rst && en && din_valid;
+endproperty
+
+FORCED_RST_WHILE_CAPTURING_SCR_C: cover property (FORCED_RST_WHILE_CAPTURING_SCR);
+
+`endif
+
+
 
 endmodule
 

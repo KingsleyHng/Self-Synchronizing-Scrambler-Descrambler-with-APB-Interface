@@ -1,5 +1,6 @@
 `default_nettype none
 
+
 module scrambler_apb #(
     parameter int N              = 58, // state register length (see scrambler_top)
     parameter int W              = 8,  // input/output width
@@ -51,9 +52,9 @@ end
 
 assign pslverr = 0;
 
-assign csr_wr = (cur_state == SETUP) && penable && pwrite;
+assign csr_wr = psel && (cur_state == SETUP) && penable && pwrite;
 assign csr_addr = paddr;
-assign csr_wdata = (cur_state == SETUP && penable) ? pwdata : 'b0;
+assign csr_wdata = psel && (cur_state == SETUP && penable) ? pwdata : 'b0;
 assign prdata = csr_rdata;
 
 scrambler_top #(
@@ -97,8 +98,100 @@ always_ff@(posedge clk or negedge rst_n)begin
   end
 end
 
+`ifdef SVA
+//SVA
+property PREADY_ALWAYS_1;
+  @(posedge clk) disable iff(!rst_n)
+  pready == 1;
+endproperty
+  
+PREADY_ASSERTION_A: assert property(PREADY_ALWAYS_1);
+
+
+property APB_CSR_WR;
+  @(posedge clk) disable iff(!rst_n)
+    (csr_wr) |=> (!csr_wr);
+endproperty
+
+APB_CSR_WR_A: assert property(APB_CSR_WR);
+
+property APB_SETUP_BEFORE_ACCESS;
+  @(posedge clk) disable iff(!rst_n)
+    ($past(cur_state) == SETUP) |-> cur_state == ACCESS;
+endproperty
+
+APB_SETUP_BEFORE_ACCESS_A: assert property(APB_SETUP_BEFORE_ACCESS);
+
+
+property APB_STATE_NO_FORTH_STATE;
+  @(posedge clk) disable iff(!rst_n)
+    cur_state inside {IDLE, SETUP, ACCESS};
+endproperty
+
+APB_STATE_NO_FORTH_STATE_A: assert property(APB_STATE_NO_FORTH_STATE);
+
+property APB_INPUT_SETUP_TO_ACCESS;
+  @(posedge clk) disable iff(!rst_n)
+    (psel && !penable) |=> (psel && penable);
+endproperty
+
+APB_INPUT_SETUP_TO_ACCESS_M: assume property(APB_INPUT_SETUP_TO_ACCESS);
+
+property APB_INPUT_PSEL_PENABLE;
+  @(posedge clk) disable iff(!rst_n)
+    (penable == 1) |-> (psel == 1);
+endproperty
+
+APB_INPUT_PSEL_PENABLE_M: assume property(APB_INPUT_PSEL_PENABLE);
+
+property APB_ADDR_DATA_STABLE;
+  @(posedge clk) disable iff(!rst_n)
+    (psel && !penable) |=> $stable(paddr) && $stable(pwrite) && ($stable(pwdata) || !pwrite);
+endproperty
+
+APB_ADDR_DATA_STABLE_M: assume property(APB_ADDR_DATA_STABLE);
+
+property CSR_WR_PAYLOAD_MATCH;
+  @(posedge clk) disable iff(!rst_n)
+    csr_wr |-> (csr_addr == paddr[7:0]) && (csr_wdata == pwdata);
+endproperty
+CSR_WR_PAYLOAD_MATCH_A: assert property(CSR_WR_PAYLOAD_MATCH);
+
+property COV_WRITE_XFER;
+  @(posedge clk) disable iff(!rst_n)
+    (psel && !penable && pwrite) ##1 (psel && penable && pwrite);
+endproperty
+
+COV_WRITE_XFER_C: cover property(COV_WRITE_XFER);
+
+property COV_READ_XFER;
+  @(posedge clk) disable iff(!rst_n)
+    (psel && !penable && !pwrite) ##1 (psel && penable && !pwrite);
+endproperty
+
+COV_READ_XFER_C: cover property(COV_READ_XFER);
+
+property COV_BACK2BACK;
+  @(posedge clk) disable iff(!rst_n)
+    (cur_state == ACCESS && psel) ##1 (cur_state == SETUP);
+endproperty
+
+COV_BACK2BACK_C: cover property(COV_BACK2BACK);
+
+property PRDATA_KNOWN;
+  @(posedge clk) disable iff(!rst_n)
+    (psel && penable && !pwrite) |-> !$isunknown(prdata);
+endproperty
+
+PRDATA_KNOWN_A: assert property(PRDATA_KNOWN);
+
+`endif
+
+
 
 
 endmodule
 
+
 `default_nettype wire
+

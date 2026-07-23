@@ -1,4 +1,5 @@
 `default_nettype none
+`define SVA
 
 module scrambler_top #(
     parameter int N = 58, // state register length
@@ -277,7 +278,116 @@ end
 assign force_rst = (test_en && (test_counter == test_period)) || (prev_mode != mode);
 
 
+//SVA
+`ifdef SVA
+property BYPASS_MODE_EN;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_BYPASS) |-> (!en_scrambler && !en_descrambler);
+endproperty
 
+BYPASS_MODE_EN_A: assert property(BYPASS_MODE_EN);
+
+property BYPASS_MODE_VALID;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_BYPASS) |-> (!scr_din_valid && !des_din_valid && (dout_valid == (din_valid && en)));
+endproperty
+
+BYPASS_MODE_VALID_A: assert property(BYPASS_MODE_VALID);
+
+property BYPASS_MODE_DOUT;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_BYPASS) |-> (dout == din);
+endproperty
+
+BYPASS_MODE_DOUT_A: assert property(BYPASS_MODE_DOUT);
+
+
+property SCRAMBLE_MODE_EN;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_SCRAMBLE) |-> (en_scrambler == en) && !en_descrambler;
+endproperty
+
+SCRAMBLE_MODE_EN_A: assert property(SCRAMBLE_MODE_EN);
+
+property SCRAMBLE_MODE_VALID;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_SCRAMBLE) |-> (scr_din_valid == din_valid) && (des_din_valid == 1'b0) && (dout_valid == scr_dout_valid);
+endproperty
+
+SCRAMBLE_MODE_VALID_A: assert property(SCRAMBLE_MODE_VALID);
+
+property SCRAMBLE_MODE_DATA;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_SCRAMBLE) |->  (dout == scr_dout);
+endproperty
+
+SCRAMBLE_MODE_DATA_A: assert property(SCRAMBLE_MODE_DATA);
+
+
+property DESCRAMBLE_MODE_EN;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_DESCRAMBLE) |-> (!en_scrambler) && (en_descrambler == en);
+endproperty
+
+DESCRAMBLE_MODE_EN_A: assert property(DESCRAMBLE_MODE_EN);
+
+property DESCRAMBLE_MODE_VALID;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_DESCRAMBLE) |-> (!scr_din_valid) && (des_din_valid == din_valid) && (dout_valid == des_dout_valid);
+endproperty
+
+DESCRAMBLE_MODE_VALID_A: assert property(DESCRAMBLE_MODE_VALID);
+
+property DESCRAMBLE_MODE_DATA;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_DESCRAMBLE) |->  (des_din == din) && (dout == des_dout);
+endproperty
+
+DESCRAMBLE_MODE_DATA_A: assert property(DESCRAMBLE_MODE_DATA);
+
+
+
+property LOOPBACK_MODE_EN;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_LOOPBACK) |-> (en_scrambler == en) && (en_descrambler == en);
+endproperty
+
+LOOPBACK_MODE_EN_A: assert property(LOOPBACK_MODE_EN);
+
+property LOOPBACK_MODE_VALID;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_LOOPBACK) |-> (scr_din_valid == din_valid) && (des_din_valid == scr_dout_valid) && (dout_valid == des_dout_valid);
+endproperty
+
+LOOPBACK_MODE_VALID_A: assert property(LOOPBACK_MODE_VALID);
+
+property LOOPBACK_MODE_DATA;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_LOOPBACK) |->  (des_din == scr_dout) && (dout == des_dout);
+endproperty
+
+LOOPBACK_MODE_DATA_A: assert property(LOOPBACK_MODE_DATA);
+
+
+property LOOPBACK_DOUT_EQUAL_DOUT;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_LOOPBACK && dout_valid
+         && !force_rst && !$past(force_rst,1) && !$past(force_rst,2))
+        |-> (dout == $past(din,2));
+endproperty
+
+LOOPBACK_DOUT_EQUAL_DOUT_A: assert property(LOOPBACK_DOUT_EQUAL_DOUT)
+  else $error("LOOPBACK_DOUT_EQUAL_DOUT: loopback failed to restore | dout=0x%0h expected(din-2)=0x%0h", $sampled(dout), $past(din,2));
+
+// 确认 loopback 真的产出过有效输出(否则上面那条会 vacuous pass)
+property LOOPBACK_DOUT_SEEN;
+    @(posedge clk) disable iff(!rst_n)
+        (mode == MODE_LOOPBACK && dout_valid);
+endproperty
+
+LOOPBACK_DOUT_SEEN_C: cover property(LOOPBACK_DOUT_SEEN);
+
+`endif
 
 
 endmodule

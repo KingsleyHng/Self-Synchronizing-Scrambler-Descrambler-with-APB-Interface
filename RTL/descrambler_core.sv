@@ -1,4 +1,5 @@
 `default_nettype none
+`define SVA
 
 module descrambler_core #(
     parameter int N         = 58,  // LFSR length
@@ -85,6 +86,10 @@ module descrambler_core #(
   always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
       dout_tmp       <= '0;
+      dout_valid <= 1'b0;
+    end
+    else if(force_rst)begin
+      dout_tmp <= '0;
       dout_valid <= 1'b0;
     end
     else if (locked && valid_comb) begin
@@ -208,6 +213,29 @@ module descrambler_core #(
   // Observation output
   // --------------------------------------------------------------------------
   assign state_o = state;
+
+//SVA
+
+`ifdef SVA
+
+property FORCED_RST_DOUT_VALID_DES;
+  @(posedge clk) disable iff(!rst_n)
+    (force_rst) |=> !dout_valid;
+endproperty
+
+FORCED_RST_DOUT_VALID_DES_A: assert property(FORCED_RST_DOUT_VALID_DES)
+  else $error("FORCED_RST_DOUT_VALID_DES: stale word leaked after force_rst | dout_valid=%0b dout=0x%0h", $sampled(dout_valid), $sampled(dout));
+
+property FORCED_RST_WHILE_CAPTURING_DES;
+  @(posedge clk) disable iff(!rst_n)
+    (force_rst && locked && valid_comb);
+endproperty
+
+FORCED_RST_WHILE_CAPTURING_DES_C: cover property (FORCED_RST_WHILE_CAPTURING_DES);
+
+`endif
+
+
 
 endmodule
 
