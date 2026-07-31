@@ -1,5 +1,9 @@
 `default_nettype none
-
+// NOTE: do NOT `define SVA here. Pass it on the command line instead
+// (VCS: +define+SVA -- already in the EDA Playground run.sh). Defining it
+// inside the RTL forces the SVA block on for EVERY consumer, and Yosys does
+// not parse `property`, so synthesis dies with
+//   "syntax error, unexpected TOK_PROPERTY".
 
 module scrambler_top #(
     parameter int N = 58, // state register length
@@ -258,24 +262,34 @@ always_comb begin
     endcase
 end
 
+// PERIOD == 0 means "periodic force_rst disabled" (see the TEST[31:1] comment
+// above), NOT "pulse every cycle". Without this guard test_counter reloads to
+// 0, immediately re-matches PERIOD=0 on the very next cycle, and never leaves
+// 0 -- so force_rst would sit HIGH permanently instead of pulsing, holding
+// both cores in reset forever. That failure is silent: every CSR still reads
+// back exactly as written and no status bit reports it; the only symptom is a
+// dout_valid that never arrives. Gate the counter and the pulse on the SAME
+// condition so the two can never drift apart.
+logic test_active;
+assign test_active = test_en && (test_period != '0);
+
 logic [31:0] test_counter;
 always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
         test_counter <= '0;
     end
-    else if(test_en && (test_counter == test_period)) begin
+    else if(test_active && (test_counter == test_period)) begin
         test_counter <= '0;
     end
-    else if(test_en) begin
+    else if(test_active) begin
         test_counter <= test_counter + 1'b1;
 
     end
-    else begin
-        test_counter <= '0;
-    end
+
 end
 
-assign force_rst = (test_en && (test_counter == test_period)) || (prev_mode != mode);
+
+assign force_rst = (test_active && (test_counter == test_period)) || (prev_mode != mode);
 
 
 //SVA
@@ -386,6 +400,26 @@ property LOOPBACK_DOUT_SEEN;
 endproperty
 
 LOOPBACK_DOUT_SEEN_C: cover property(LOOPBACK_DOUT_SEEN);
+
+// TEST.PERIOD == 0 must DISABLE the periodic force_rst, not latch it high.
+// (prev_mode == mode excludes the unrelated mode-change force_rst pulse.)
+property TEST_PERIOD_ZERO_DISABLES_TIMER;
+    @(posedge clk) disable iff(!rst_n)
+        (test_en && (test_period == '0) && (prev_mode == mode)) |-> !force_rst;
+endproperty
+
+TEST_PERIOD_ZERO_DISABLES_TIMER_A: assert property(TEST_PERIOD_ZERO_DISABLES_TIMER)
+  else $error("TEST_PERIOD_ZERO_DISABLES_TIMER: PERIOD=0 latched force_rst high instead of disabling the timer | force_rst=%0b test_counter=%0d", $sampled(force_rst),
+ $sampled(test_counter));
+
+// Guards the assertion above against passing vacuously: the PERIOD=0-armed
+// scenario must actually be stimulated for that assert to mean anything.
+property TEST_PERIOD_ZERO_ARMED;
+    @(posedge clk) disable iff(!rst_n)
+        (test_en && (test_period == '0));
+endproperty
+
+TEST_PERIOD_ZERO_ARMED_C: cover property(TEST_PERIOD_ZERO_ARMED);
 
 `endif
 
