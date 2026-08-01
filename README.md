@@ -30,11 +30,15 @@ Default config: `N = 58` (LFSR length), `W = 8` (parallel width), taps at 39 and
 ## Architecture
 
 ```
-scrambler_apb          Top: AMBA APB slave adapter (FSM: IDLE / SETUP / ACCESS)
+scrambler_apb          Top: AMBA APB slave adapter (zero-wait-state, stateless)
 └── scrambler_top      Wrapper: mode mux + CSR register file + test counter
     ├── scrambler_core   TX core: 58-bit LFSR with feedback
     └── descrambler_core RX core: mirrored, feed-forward + lock detection
 ```
+
+The APB adapter holds no state: `psel`/`penable` already encode the bus phase completely
+(SETUP = `psel & !penable`, ACCESS = `psel & penable`), so a slave that never stalls has
+nothing to remember. Back-to-back transfers are supported.
 
 ## Repository layout
 
@@ -48,10 +52,16 @@ Doc/        synthesis report, architecture doc, equivalence-check guide
 
 | Metric | Value |
 |---|---|
-| Cells (generic gates) | 1650 |
-| Flip-flops | 274 |
-| Formal equivalence (netlist vs RTL) | 1011 / 1011 proven |
+| Cells (generic gates) | 1429 |
+| Flip-flops | 241 |
+| Longest logic depth | 16 levels |
+| Formal equivalence (netlist vs RTL) | 944 / 944 proven, 0 unproven |
 | Inferred latches | 0 |
+
+The critical path is the **test counter's carry chain**, not the datapath — the scramble path
+itself is only 2 XOR levels. That made `TEST.PERIOD`'s width the one real f<sub>max</sub> lever:
+narrowing it from 31 to 16 bits cut the longest path from 31 levels to 16 and removed 30
+flip-flops. Removing the APB adapter's redundant FSM took out 2 more.
 
 > Note: this is **technology-independent** synthesis — no ASIC standard-cell library or FPGA
 > device yet, so these are complexity indicators, not real area/timing/power. Full write-up in
@@ -69,10 +79,18 @@ cd syn
 
 ## Verification
 
-- Self-checking APB regression (`RTL/tb/tb_scrambler_apb_regression.sv`) drives the protocol,
-  exercises the modes, and prints a PASS/FAIL summary.
-- Unit and loopback benches for the cores and top level.
+- Self-checking APB regression (`RTL/tb/tb_scrambler_apb_regression.sv`): **384 checks, 0 failures**
+  across 14 sub-tests. Every CSR write — mode select, seed load, test period, W1C clears — goes
+  through a real APB SETUP→ACCESS handshake rather than poking the wrapper's CSR ports directly,
+  so a failure means the APB bridge broke something that direct CSR access did not.
+- **32 SVA properties** (24 assert + 8 cover/assume) across the three RTL layers. The covers are
+  checked for non-vacuity: a property that passes because its scenario never occurs is worse than
+  no property at all.
 - Netlist cross-checked against the RTL by formal equivalence.
+
+Sub-tests: bypass · scramble · descramble · loopback · non-zero-seed reject · forced-reset period
+(TX and RX) · `PERIOD=0` boundary · `TEST` reserved bits · APB back-to-back transfers ·
+back-pressure · `BIT_ORDER` mirror · all-zero alarm · parity (SEU) alarm.
 
 ## Roadmap
 
@@ -84,8 +102,18 @@ cd syn
 ## Notes
 
 A few design choices are documented in more detail in `Doc/`: reset to all-ones + zero-seed
-reject to avoid the LFSR all-zero lock-up; `seed_load` guarding during active data flow; and
-using `synth -nofsm` to keep the APB FSM in binary encoding.
+reject to avoid the LFSR all-zero lock-up, and `seed_load` guarding during active data flow.
+
+Two findings worth repeating, both from the same lesson — *green numbers do not mean everything
+was tested*:
+
+- `COV_BACK2BACK_C` matched **0 times** for a long while. Every test dropped `psel` between
+  transfers, so the APB FSM's `ACCESS → SETUP` arc — its only reason to exist — had never been
+  executed. That cover being empty is what exposed the FSM as dead logic. **A cover that never
+  matches is a hint that the logic it guards is never reached.**
+- `TEST.PERIOD = 0` used to latch `force_rst` high permanently, holding both cores in reset.
+  The failure was silent: every CSR read back exactly as written and no status bit reported it;
+  the only symptom was a `dout_valid` that never arrived.
 
 ## License
 

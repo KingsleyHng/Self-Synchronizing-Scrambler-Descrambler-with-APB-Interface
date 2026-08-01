@@ -1,0 +1,1917 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.67+24 (git sha1 0e82bbefe, Release, Clang /usr/bin/clang++ 18.1.8)
+
+-- Executing script file `synth_generic.ys' --
+
+1. Executing Verilog-2005 frontend: ../RTL/scrambler_core.sv
+Parsing SystemVerilog input from `../RTL/scrambler_core.sv' to AST representation.
+Generating RTLIL representation for module `\scrambler_core'.
+Successfully finished Verilog frontend.
+
+2. Executing Verilog-2005 frontend: ../RTL/descrambler_core.sv
+Parsing SystemVerilog input from `../RTL/descrambler_core.sv' to AST representation.
+Generating RTLIL representation for module `\descrambler_core'.
+Successfully finished Verilog frontend.
+
+3. Executing Verilog-2005 frontend: ../RTL/scrambler_top.sv
+Parsing SystemVerilog input from `../RTL/scrambler_top.sv' to AST representation.
+Generating RTLIL representation for module `\scrambler_top'.
+Warning: Replacing memory \csr_reg with list of registers. See ../RTL/scrambler_top.sv:268
+Successfully finished Verilog frontend.
+
+4. Executing Verilog-2005 frontend: ../RTL/scrambler_apb.sv
+Parsing SystemVerilog input from `../RTL/scrambler_apb.sv' to AST representation.
+Generating RTLIL representation for module `\scrambler_apb'.
+Successfully finished Verilog frontend.
+
+5. Executing HIERARCHY pass (managing design hierarchy).
+
+5.1. Analyzing design hierarchy..
+Top module:  \scrambler_apb
+Used module:     \scrambler_top
+Used module:         \descrambler_core
+Used module:         \scrambler_core
+Parameter \N = 58
+Parameter \W = 8
+Parameter \TAP_A = 39
+Parameter \TAP_B = 58
+Parameter \BIT_ORDER = 0
+
+5.2. Executing AST frontend in derive mode using pre-parsed AST for module `\descrambler_core'.
+Parameter \N = 58
+Parameter \W = 8
+Parameter \TAP_A = 39
+Parameter \TAP_B = 58
+Parameter \BIT_ORDER = 0
+Generating RTLIL representation for module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Parameter \N = 58
+Parameter \W = 8
+Parameter \TAP_A = 39
+Parameter \TAP_B = 58
+Parameter \BIT_ORDER = 0
+
+5.3. Executing AST frontend in derive mode using pre-parsed AST for module `\scrambler_core'.
+Parameter \N = 58
+Parameter \W = 8
+Parameter \TAP_A = 39
+Parameter \TAP_B = 58
+Parameter \BIT_ORDER = 0
+Generating RTLIL representation for module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Parameter \N = 58
+Parameter \W = 8
+Parameter \TAP_A = 39
+Parameter \TAP_B = 58
+Parameter \BIT_ORDER = 0
+
+5.4. Executing AST frontend in derive mode using pre-parsed AST for module `\scrambler_top'.
+Parameter \N = 58
+Parameter \W = 8
+Parameter \TAP_A = 39
+Parameter \TAP_B = 58
+Parameter \BIT_ORDER = 0
+Generating RTLIL representation for module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Warning: Replacing memory \csr_reg with list of registers. See ../RTL/scrambler_top.sv:268
+
+5.5. Analyzing design hierarchy..
+Top module:  \scrambler_apb
+Used module:     $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+Used module:         \descrambler_core
+Used module:         \scrambler_core
+Parameter \N = 58
+Parameter \W = 8
+Parameter \TAP_A = 39
+Parameter \TAP_B = 58
+Parameter \BIT_ORDER = 0
+Found cached RTLIL representation for module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Parameter \N = 58
+Parameter \W = 8
+Parameter \TAP_A = 39
+Parameter \TAP_B = 58
+Parameter \BIT_ORDER = 0
+Found cached RTLIL representation for module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+
+5.6. Analyzing design hierarchy..
+Top module:  \scrambler_apb
+Used module:     $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+
+5.7. Analyzing design hierarchy..
+Top module:  \scrambler_apb
+Used module:     $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+Removing unused module `\scrambler_top'.
+Removing unused module `\descrambler_core'.
+Removing unused module `\scrambler_core'.
+Removed 3 unused modules.
+
+6. Executing SYNTH pass.
+
+6.1. Executing HIERARCHY pass (managing design hierarchy).
+
+6.1.1. Analyzing design hierarchy..
+Top module:  \scrambler_apb
+Used module:     $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+
+6.1.2. Analyzing design hierarchy..
+Top module:  \scrambler_apb
+Used module:     $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+Removed 0 unused modules.
+
+6.2. Executing PROC pass (convert processes to netlists).
+
+6.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 1 empty switch in `\scrambler_apb.$proc$../RTL/scrambler_apb.sv:39$131'.
+Removing empty process `scrambler_apb.$proc$../RTL/scrambler_apb.sv:39$131'.
+Found and cleaned up 5 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:68$251'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:68$251'.
+Found and cleaned up 3 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:43$204'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:43$204'.
+Found and cleaned up 1 empty switch in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:117$173'.
+Found and cleaned up 1 empty switch in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:64$169'.
+Found and cleaned up 3 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:41$168'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:41$168'.
+Found and cleaned up 1 empty switch in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:124$140'.
+Found and cleaned up 1 empty switch in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:62$132'.
+Cleaned up 16 empty switches.
+
+6.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 2 switch rules as full_case in process $proc$../RTL/scrambler_top.sv:338$242 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Marked 1 switch rules as full_case in process $proc$../RTL/scrambler_top.sv:281$239 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Marked 1 switch rules as full_case in process $proc$../RTL/scrambler_top.sv:204$214 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Marked 1 switch rules as full_case in process $proc$../RTL/scrambler_top.sv:194$212 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Removed 1 dead cases from process $proc$../RTL/scrambler_top.sv:133$210 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Marked 1 switch rules as full_case in process $proc$../RTL/scrambler_top.sv:133$210 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Marked 3 switch rules as full_case in process $proc$../RTL/scrambler_core.sv:203$184 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Marked 2 switch rules as full_case in process $proc$../RTL/scrambler_core.sv:165$179 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Marked 2 switch rules as full_case in process $proc$../RTL/scrambler_core.sv:150$176 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Marked 1 switch rules as full_case in process $proc$../RTL/scrambler_core.sv:134$174 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Marked 3 switch rules as full_case in process $proc$../RTL/scrambler_core.sv:91$170 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Marked 2 switch rules as full_case in process $proc$../RTL/descrambler_core.sv:185$145 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Marked 2 switch rules as full_case in process $proc$../RTL/descrambler_core.sv:156$142 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Marked 2 switch rules as full_case in process $proc$../RTL/descrambler_core.sv:108$136 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Marked 3 switch rules as full_case in process $proc$../RTL/descrambler_core.sv:86$133 in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Removed a total of 1 dead cases.
+
+6.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 5 redundant assignments.
+Promoted 36 assignments to connections.
+
+6.2.4. Executing PROC_INIT pass (extract init attributes).
+
+6.2.5. Executing PROC_ARST pass (detect async resets in processes).
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:338$242'.
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:204$214'.
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:194$212'.
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:203$184'.
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:165$179'.
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:150$176'.
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:91$170'.
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:185$145'.
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:156$142'.
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:108$136'.
+Found async reset \rst_n in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:86$133'.
+
+6.2.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~26 debug messages>
+
+6.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:338$242'.
+     1/1: $0\test_counter[15:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:281$239'.
+     1/1: $1\csr_rdata[31:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:204$214'.
+     1/6: $0\seed_reg[57:0] [57:32]
+     2/6: $0\seed_reg[57:0] [31:0]
+     3/6: $0\test_period[15:0]
+     4/6: $0\test_en[0:0]
+     5/6: $0\ctrl_en[0:0]
+     6/6: $0\mode[1:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:194$212'.
+     1/1: $0\prev_mode[1:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:133$210'.
+     1/7: $1\dout_valid[0:0]
+     2/7: $1\dout[7:0]
+     3/7: $1\des_din[7:0]
+     4/7: $1\des_din_valid[0:0]
+     5/7: $1\scr_din_valid[0:0]
+     6/7: $1\en_descrambler[0:0]
+     7/7: $1\en_scrambler[0:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:203$184'.
+     1/2: $0\state_parity[0:0]
+     2/2: $0\state[57:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:165$179'.
+     1/1: $0\parity_err[0:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:150$176'.
+     1/1: $0\allzero_err[0:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:134$174'.
+     1/1: $1\internal_seed_load[0:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:117$173'.
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:91$170'.
+     1/2: $0\dout_valid[0:0]
+     2/2: $0\dout_tmp[7:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:64$169'.
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:185$145'.
+     1/2: $0\lock_counter[4:0]
+     2/2: $0\locked[0:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:156$142'.
+     1/2: $0\state_parity[0:0]
+     2/2: $0\state[57:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:124$140'.
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:108$136'.
+     1/1: $0\parity_err[0:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:86$133'.
+     1/2: $0\dout_valid[0:0]
+     2/2: $0\dout_tmp[7:0]
+Creating decoders for process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:62$132'.
+
+6.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_rdata' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:281$239'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_reg[0]' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_reg[1]' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_reg[2]' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_reg[3]' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_reg[4]' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_reg[5]' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_reg[6]' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_reg[7]' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_reg[8]' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\csr_reg[9]' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\dout' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:133$210'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\dout_valid' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:133$210'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\en_scrambler' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:133$210'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\en_descrambler' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:133$210'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\scr_din_valid' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:133$210'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\des_din_valid' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:133$210'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\des_din' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:133$210'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.\internal_seed_load' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:134$174'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.\dout' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:117$173'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.\din_core' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:64$169'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.\dout' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:124$140'.
+No latch inferred for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.\din_core' from process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:62$132'.
+
+6.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\test_counter' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:338$242'.
+  created $adff cell `$procdff$423' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\mode' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:204$214'.
+  created $adff cell `$procdff$428' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\ctrl_en' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:204$214'.
+  created $adff cell `$procdff$433' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\seed_reg' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:204$214'.
+  created $adff cell `$procdff$438' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\test_period' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:204$214'.
+  created $adff cell `$procdff$443' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\test_en' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:204$214'.
+  created $adff cell `$procdff$448' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.\prev_mode' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:194$212'.
+  created $adff cell `$procdff$453' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.\state' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:203$184'.
+  created $adff cell `$procdff$458' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.\state_parity' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:203$184'.
+  created $adff cell `$procdff$463' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.\parity_err' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:165$179'.
+  created $adff cell `$procdff$468' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.\allzero_err' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:150$176'.
+  created $adff cell `$procdff$473' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.\dout_valid' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:91$170'.
+  created $adff cell `$procdff$478' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.\dout_tmp' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:91$170'.
+  created $adff cell `$procdff$483' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.\locked' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:185$145'.
+  created $adff cell `$procdff$488' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.\lock_counter' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:185$145'.
+  created $adff cell `$procdff$493' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.\state' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:156$142'.
+  created $adff cell `$procdff$498' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.\state_parity' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:156$142'.
+  created $adff cell `$procdff$503' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.\parity_err' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:108$136'.
+  created $adff cell `$procdff$508' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.\dout_valid' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:86$133'.
+  created $adff cell `$procdff$513' with positive edge clock and positive level reset.
+Creating register for signal `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.\dout_tmp' using process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:86$133'.
+  created $adff cell `$procdff$518' with positive edge clock and positive level reset.
+
+6.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+6.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 2 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:338$242'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:338$242'.
+Found and cleaned up 1 empty switch in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:281$239'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:281$239'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:267$232'.
+Found and cleaned up 2 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:204$214'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:204$214'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:194$212'.
+Found and cleaned up 1 empty switch in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:133$210'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$proc$../RTL/scrambler_top.sv:133$210'.
+Found and cleaned up 3 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:203$184'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:203$184'.
+Found and cleaned up 2 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:165$179'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:165$179'.
+Found and cleaned up 2 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:150$176'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:150$176'.
+Found and cleaned up 1 empty switch in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:134$174'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:134$174'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:117$173'.
+Found and cleaned up 2 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:91$170'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:91$170'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.$proc$../RTL/scrambler_core.sv:64$169'.
+Found and cleaned up 4 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:185$145'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:185$145'.
+Found and cleaned up 2 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:156$142'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:156$142'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:124$140'.
+Found and cleaned up 2 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:108$136'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:108$136'.
+Found and cleaned up 2 empty switches in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:86$133'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:86$133'.
+Removing empty process `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$proc$../RTL/descrambler_core.sv:62$132'.
+Cleaned up 26 empty switches.
+
+6.2.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+<suppressed ~29 debug messages>
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+<suppressed ~14 debug messages>
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+<suppressed ~15 debug messages>
+
+6.3. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+Removed 32 unused cells and 198 unused wires.
+<suppressed ~36 debug messages>
+
+6.5. Executing CHECK pass (checking for obvious problems).
+Checking module scrambler_apb...
+Checking module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top...
+Checking module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core...
+Checking module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core...
+Found and reported 0 problems.
+
+6.6. Executing OPT pass (performing simple optimizations).
+
+6.6.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.6.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 100 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 66 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 64 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+<suppressed ~108 debug messages>
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 45 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 44 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+<suppressed ~3 debug messages>
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 48 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 46 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+<suppressed ~6 debug messages>
+Removed a total of 39 cells.
+
+6.6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \scrambler_apb..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~82 debug messages>
+
+6.6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \scrambler_apb.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+    New ctrl vector for $pmux cell $procmux$312: { $procmux$333_CMP $procmux$334_CMP $auto$opt_reduce.cc:137:opt_pmux$520 }
+    New ctrl vector for $pmux cell $procmux$327: { $auto$opt_reduce.cc:137:opt_pmux$524 $auto$opt_reduce.cc:137:opt_pmux$522 }
+    New ctrl vector for $pmux cell $procmux$307: { $auto$opt_reduce.cc:137:opt_pmux$526 $procmux$335_CMP $procmux$336_CMP }
+    New ctrl vector for $pmux cell $procmux$302: { $auto$opt_reduce.cc:137:opt_pmux$528 $procmux$335_CMP $procmux$336_CMP }
+    New ctrl vector for $pmux cell $procmux$317: { $procmux$333_CMP $procmux$334_CMP $auto$opt_reduce.cc:137:opt_pmux$530 }
+    New ctrl vector for $pmux cell $procmux$332: { $auto$opt_reduce.cc:137:opt_pmux$534 $auto$opt_reduce.cc:137:opt_pmux$532 }
+    New ctrl vector for $pmux cell $procmux$322: { $auto$opt_reduce.cc:137:opt_pmux$538 $auto$opt_reduce.cc:137:opt_pmux$536 }
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Performed a total of 7 changes.
+
+6.6.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 74 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 68 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+<suppressed ~18 debug messages>
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 44 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 46 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 6 cells.
+
+6.6.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.6.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+Removed 0 unused cells and 45 unused wires.
+<suppressed ~3 debug messages>
+
+6.6.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.6.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.6.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \scrambler_apb..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~82 debug messages>
+
+6.6.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \scrambler_apb.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Performed a total of 0 changes.
+
+6.6.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 68 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 44 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 46 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 0 cells.
+
+6.6.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.6.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+
+6.6.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.6.16. Finished fast OPT passes. (There is nothing left to do.)
+
+6.7. Executing OPT pass (performing simple optimizations).
+
+6.7.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.7.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 68 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 44 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 46 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 0 cells.
+
+6.7.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \scrambler_apb..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~82 debug messages>
+
+6.7.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \scrambler_apb.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Performed a total of 0 changes.
+
+6.7.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 68 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 44 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 46 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 0 cells.
+
+6.7.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding EN signal on $procdff$428 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top (D = \csr_wdata [1:0], Q = \mode).
+Adding EN signal on $procdff$423 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top (D = $0\test_counter[15:0], Q = \test_counter).
+Adding EN signal on $procdff$448 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top (D = \csr_wdata [0], Q = \test_en).
+Adding EN signal on $procdff$433 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top (D = \csr_wdata [2], Q = \ctrl_en).
+Adding EN signal on $procdff$438 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top (D = \csr_wdata [25:0], Q = \seed_reg [57:32]).
+Adding EN signal on $procdff$438 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top (D = \csr_wdata, Q = \seed_reg [31:0]).
+Adding EN signal on $procdff$443 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top (D = \csr_wdata [16:1], Q = \test_period).
+Adding EN signal on $procdff$463 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core (D = $0\state_parity[0:0], Q = \state_parity).
+Adding EN signal on $procdff$473 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core (D = $0\allzero_err[0:0], Q = \allzero_err).
+Adding EN signal on $procdff$458 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core (D = $0\state[57:0], Q = \state).
+Adding EN signal on $procdff$468 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core (D = $0\parity_err[0:0], Q = \parity_err).
+Adding EN signal on $procdff$493 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core (D = $0\lock_counter[4:0], Q = \lock_counter).
+Adding EN signal on $procdff$503 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core (D = $0\state_parity[0:0], Q = \state_parity).
+Adding EN signal on $procdff$498 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core (D = $0\state[57:0], Q = \state).
+Adding EN signal on $procdff$508 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core (D = $0\parity_err[0:0], Q = \parity_err).
+Adding EN signal on $procdff$488 ($adff) from module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core (D = $0\locked[0:0], Q = \locked).
+
+6.7.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+Removed 12 unused cells and 11 unused wires.
+<suppressed ~13 debug messages>
+
+6.7.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+<suppressed ~1 debug messages>
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+<suppressed ~4 debug messages>
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+<suppressed ~6 debug messages>
+
+6.7.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.7.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \scrambler_apb..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~64 debug messages>
+
+6.7.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \scrambler_apb.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Performed a total of 0 changes.
+
+6.7.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 64 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 62 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+<suppressed ~6 debug messages>
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 48 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 47 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+<suppressed ~3 debug messages>
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 55 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 52 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+<suppressed ~9 debug messages>
+Removed a total of 6 cells.
+
+6.7.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.7.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+Removed 0 unused cells and 6 unused wires.
+<suppressed ~3 debug messages>
+
+6.7.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.7.16. Rerunning OPT passes. (Maybe there is more to do..)
+
+6.7.17. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \scrambler_apb..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~64 debug messages>
+
+6.7.18. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \scrambler_apb.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Performed a total of 0 changes.
+
+6.7.19. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 62 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 47 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 52 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 0 cells.
+
+6.7.20. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.7.21. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+
+6.7.22. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.7.23. Finished fast OPT passes. (There is nothing left to do.)
+
+6.8. Executing WREDUCE pass (reducing word size of cells).
+Removed top 2 bits (of 8) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$procmux$259_CMP0 ($eq).
+Removed top 2 bits (of 8) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$procmux$260_CMP0 ($eq).
+Removed top 3 bits (of 8) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$procmux$261_CMP0 ($eq).
+Removed top 3 bits (of 8) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$procmux$262_CMP0 ($eq).
+Removed top 3 bits (of 8) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$procmux$263_CMP0 ($eq).
+Removed top 4 bits (of 8) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$procmux$265_CMP0 ($eq).
+Removed top 4 bits (of 8) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$procmux$271_CMP0 ($eq).
+Removed top 5 bits (of 8) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$procmux$277_CMP0 ($eq).
+Removed top 3 bits (of 8) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$procmux$285_CMP0 ($eq).
+Removed top 1 bits (of 2) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.$procmux$335_CMP0 ($eq).
+Removed top 6 bits (of 32) from wire $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.csr_reg[9].
+Removed top 6 bits (of 32) from wire $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.csr_reg[7].
+Removed top 29 bits (of 32) from wire $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.csr_reg[5].
+Removed top 15 bits (of 32) from wire $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.csr_reg[4].
+Removed top 30 bits (of 32) from wire $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.csr_reg[3].
+Removed top 6 bits (of 32) from wire $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.csr_reg[2].
+Removed top 29 bits (of 32) from wire $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.csr_reg[0].
+Removed top 2 bits (of 5) from port B of cell $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.$eq$../RTL/descrambler_core.sv:195$148 ($eq).
+
+6.9. Executing PEEPOPT pass (run peephole optimizers).
+
+6.10. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+Removed 0 unused cells and 7 unused wires.
+<suppressed ~1 debug messages>
+
+6.11. Executing ALUMACC pass (create $alu and $macc cells).
+Extracting $alu and $macc cells in module scrambler_apb:
+  created 0 $alu and 0 $macc cells.
+Extracting $alu and $macc cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top:
+  creating $macc model for $add$../RTL/scrambler_top.sv:346$246 ($add).
+  creating $alu model for $macc $add$../RTL/scrambler_top.sv:346$246.
+  creating $alu cell for $add$../RTL/scrambler_top.sv:346$246: $auto$alumacc.cc:512:replace_alu$602
+  created 1 $alu and 0 $macc cells.
+Extracting $alu and $macc cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core:
+  created 0 $alu and 0 $macc cells.
+Extracting $alu and $macc cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core:
+  creating $macc model for $add$../RTL/descrambler_core.sv:198$150 ($add).
+  creating $alu model for $macc $add$../RTL/descrambler_core.sv:198$150.
+  creating $alu cell for $add$../RTL/descrambler_core.sv:198$150: $auto$alumacc.cc:512:replace_alu$605
+  created 1 $alu and 0 $macc cells.
+
+6.12. Executing SHARE pass (SAT-based resource sharing).
+
+6.13. Executing OPT pass (performing simple optimizations).
+
+6.13.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.13.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 62 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 47 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 52 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 0 cells.
+
+6.13.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \scrambler_apb..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~64 debug messages>
+
+6.13.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \scrambler_apb.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Performed a total of 0 changes.
+
+6.13.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 62 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 47 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 52 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 0 cells.
+
+6.13.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.13.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+
+6.13.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.13.9. Finished fast OPT passes. (There is nothing left to do.)
+
+6.14. Executing MEMORY pass.
+
+6.14.1. Executing OPT_MEM pass (optimize memories).
+Performed a total of 0 transformations.
+
+6.14.2. Executing OPT_MEM_PRIORITY pass (removing unnecessary memory write priority relations).
+Performed a total of 0 transformations.
+
+6.14.3. Executing OPT_MEM_FEEDBACK pass (finding memory read-to-write feedback paths).
+
+6.14.4. Executing MEMORY_BMUX2ROM pass (converting muxes to ROMs).
+
+6.14.5. Executing MEMORY_DFF pass (merging $dff cells to $memrd).
+
+6.14.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+
+6.14.7. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+
+6.14.8. Executing OPT_MEM_WIDEN pass (optimize memories where all ports are wide).
+Performed a total of 0 transformations.
+
+6.14.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+
+6.14.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+6.15. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+
+6.16. Executing OPT pass (performing simple optimizations).
+
+6.16.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+<suppressed ~8 debug messages>
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+<suppressed ~9 debug messages>
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+<suppressed ~10 debug messages>
+
+6.16.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 61 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 40 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 44 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 0 cells.
+
+6.16.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.16.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+Removed 3 unused cells and 19 unused wires.
+<suppressed ~6 debug messages>
+
+6.16.5. Finished fast OPT passes.
+
+6.17. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+
+6.18. Executing OPT pass (performing simple optimizations).
+
+6.18.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+<suppressed ~1 debug messages>
+
+6.18.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 58 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 40 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 44 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 0 cells.
+
+6.18.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \scrambler_apb..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Running muxtree optimizer on module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~42 debug messages>
+
+6.18.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \scrambler_apb.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+  Optimizing cells in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+Performed a total of 0 changes.
+
+6.18.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 58 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 40 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 44 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 0 cells.
+
+6.18.6. Executing OPT_SHARE pass.
+
+6.18.7. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.18.8. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+
+6.18.9. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.18.10. Finished fast OPT passes. (There is nothing left to do.)
+
+6.19. Executing TECHMAP pass (map to technology primitives).
+
+6.19.1. Executing Verilog-2005 frontend: /mnt/c/Yosys/oss-cad-suite/lib/../share/yosys/techmap.v
+Parsing Verilog input from `/mnt/c/Yosys/oss-cad-suite/lib/../share/yosys/techmap.v' to AST representation.
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu_brent_kung'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `$__div_mod_u'.
+Generating RTLIL representation for module `$__div_mod_trunc'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `$__div_mod_floor'.
+Generating RTLIL representation for module `\_90_divfloor'.
+Generating RTLIL representation for module `\_90_modfloor'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_demux'.
+Generating RTLIL representation for module `\_90_lut'.
+Generating RTLIL representation for module `$connect'.
+Generating RTLIL representation for module `$input_port'.
+Successfully finished Verilog frontend.
+
+6.19.2. Continuing TECHMAP pass.
+Using template $paramod$672a140277c71df8314410f22acc08d55222c3c7\_90_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $reduce_and.
+Using extmapper simplemap for cells of type $reduce_bool.
+Using extmapper simplemap for cells of type $adffe.
+Using extmapper simplemap for cells of type $ne.
+Using extmapper simplemap for cells of type $logic_and.
+Using extmapper simplemap for cells of type $reduce_xor.
+Using extmapper simplemap for cells of type $eq.
+Using extmapper simplemap for cells of type $xor.
+Using extmapper simplemap for cells of type $mux.
+Using extmapper simplemap for cells of type $not.
+Using extmapper simplemap for cells of type $and.
+Using extmapper simplemap for cells of type $adff.
+Using extmapper simplemap for cells of type $pos.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000000101 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000000101 for cells of type $lcu.
+Using extmapper simplemap for cells of type $or.
+Using extmapper simplemap for cells of type $logic_not.
+Using template $paramod$2af30114e9bd4ccb04dad757b3f0a8f6bf0615b0\_90_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $reduce_or.
+Using extmapper simplemap for cells of type $logic_or.
+Using extmapper simplemap for cells of type $pmux.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000010000 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000010000 for cells of type $lcu.
+No more expansions possible.
+<suppressed ~616 debug messages>
+
+6.20. Executing OPT pass (performing simple optimizations).
+
+6.20.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+<suppressed ~475 debug messages>
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+<suppressed ~1 debug messages>
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+<suppressed ~47 debug messages>
+
+6.20.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 869 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 831 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 818 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 810 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+<suppressed ~177 debug messages>
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 515 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 490 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 478 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 472 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+<suppressed ~129 debug messages>
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 321 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 292 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 280 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 274 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+<suppressed ~141 debug messages>
+Removed a total of 149 cells.
+
+6.20.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.20.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+Removed 23 unused cells and 432 unused wires.
+<suppressed ~26 debug messages>
+
+6.20.5. Finished fast OPT passes.
+
+6.21. Executing ABC pass (technology mapping using ABC).
+
+6.21.1. Extracting gate netlist of module `\scrambler_apb' to `<abc-temp-dir>/input.blif'..
+
+6.21.1.1. Executed ABC.
+Extracted 2 gates and 5 wires to a netlist network with 3 inputs and 1 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: UC Berkeley, ABC 1.01 (compiled Jul 11 2026 03:57:20)
+ABC: abc 01> empty
+ABC: abc 01> source <abc-temp-dir>/abc.script
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+ABC: 
+ABC: YOSYS_ABC_DONE 
+
+6.21.1.2. Re-integrating ABC results.
+ABC RESULTS:               AND cells:        2
+ABC RESULTS:        internal signals:        1
+ABC RESULTS:           input signals:        3
+ABC RESULTS:          output signals:        1
+Removing temp directory.
+
+6.21.2. Extracting gate netlist of module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top' to `<abc-temp-dir>/input.blif'..
+
+6.21.2.1. Executed ABC.
+Extracted 693 gates and 950 wires to a netlist network with 256 inputs and 78 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: UC Berkeley, ABC 1.01 (compiled Jul 11 2026 03:57:20)
+ABC: abc 01> empty
+ABC: abc 01> source <abc-temp-dir>/abc.script
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+ABC: 
+ABC: YOSYS_ABC_DONE 
+
+6.21.2.2. Re-integrating ABC results.
+ABC RESULTS:               AND cells:      286
+ABC RESULTS:            ANDNOT cells:       14
+ABC RESULTS:              NAND cells:      300
+ABC RESULTS:               NOR cells:       40
+ABC RESULTS:               NOT cells:        1
+ABC RESULTS:                OR cells:        8
+ABC RESULTS:             ORNOT cells:       20
+ABC RESULTS:              XNOR cells:       13
+ABC RESULTS:               XOR cells:        7
+ABC RESULTS:        internal signals:      616
+ABC RESULTS:           input signals:      256
+ABC RESULTS:          output signals:       78
+Removing temp directory.
+
+6.21.3. Extracting gate netlist of module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core' to `<abc-temp-dir>/input.blif'..
+
+6.21.3.1. Executed ABC.
+Extracted 401 gates and 534 wires to a netlist network with 131 inputs and 73 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: UC Berkeley, ABC 1.01 (compiled Jul 11 2026 03:57:20)
+ABC: abc 01> empty
+ABC: abc 01> source <abc-temp-dir>/abc.script
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+ABC: 
+ABC: YOSYS_ABC_DONE 
+
+6.21.3.2. Re-integrating ABC results.
+ABC RESULTS:               AND cells:       57
+ABC RESULTS:               MUX cells:       59
+ABC RESULTS:              NAND cells:        1
+ABC RESULTS:               NOR cells:       67
+ABC RESULTS:               NOT cells:        9
+ABC RESULTS:                OR cells:       62
+ABC RESULTS:             ORNOT cells:        1
+ABC RESULTS:              XNOR cells:       93
+ABC RESULTS:               XOR cells:       51
+ABC RESULTS:        internal signals:      330
+ABC RESULTS:           input signals:      131
+ABC RESULTS:          output signals:       73
+Removing temp directory.
+
+6.21.4. Extracting gate netlist of module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core' to `<abc-temp-dir>/input.blif'..
+
+6.21.4.1. Executed ABC.
+Extracted 196 gates and 275 wires to a netlist network with 77 inputs and 79 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: UC Berkeley, ABC 1.01 (compiled Jul 11 2026 03:57:20)
+ABC: abc 01> empty
+ABC: abc 01> source <abc-temp-dir>/abc.script
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+ABC: 
+ABC: YOSYS_ABC_DONE 
+
+6.21.4.2. Re-integrating ABC results.
+ABC RESULTS:               AND cells:       20
+ABC RESULTS:            ANDNOT cells:        3
+ABC RESULTS:              NAND cells:        4
+ABC RESULTS:               NOR cells:        2
+ABC RESULTS:               NOT cells:        1
+ABC RESULTS:                OR cells:       64
+ABC RESULTS:             ORNOT cells:        1
+ABC RESULTS:              XNOR cells:       69
+ABC RESULTS:               XOR cells:       17
+ABC RESULTS:        internal signals:      119
+ABC RESULTS:           input signals:       77
+ABC RESULTS:          output signals:       79
+Removing temp directory.
+Removing global temp directory.
+
+6.22. Executing OPT pass (performing simple optimizations).
+
+6.22.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Optimizing module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+
+6.22.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 3 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Computing hashes of 787 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Computing hashes of 470 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core'.
+Finding identical cells in module `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Computing hashes of 256 cells of `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Finding duplicate cells in `$paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core'.
+Removed a total of 0 cells.
+
+6.22.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+6.22.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core..
+Finding unused cells or wires in module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core..
+Removed 0 unused cells and 1145 unused wires.
+<suppressed ~14 debug messages>
+
+6.22.5. Finished fast OPT passes.
+
+6.23. Executing HIERARCHY pass (managing design hierarchy).
+Attribute `top' found on module `scrambler_apb'. Setting top module to scrambler_apb.
+
+6.23.1. Analyzing design hierarchy..
+Top module:  \scrambler_apb
+Used module:     $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+
+6.23.2. Analyzing design hierarchy..
+Top module:  \scrambler_apb
+Used module:     $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+Used module:         $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+Removed 0 unused modules.
+
+6.24. Printing statistics.
+
+=== scrambler_apb ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       20 wires
+      172 wire bits
+       19 public wires
+      171 public wire bits
+       15 ports
+       98 port bits
+        2 cells
+        2   $_AND_
+        1 submodules
+        1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+
+=== $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      670 wires
+     1352 wire bits
+       53 public wires
+      720 public wire bits
+       11 ports
+       94 port bits
+      785 cells
+       14   $_ANDNOT_
+      286   $_AND_
+       36   $_DFFE_PN0P_
+       58   $_DFFE_PN1P_
+        2   $_DFF_PN0_
+      300   $_NAND_
+       40   $_NOR_
+        1   $_NOT_
+       20   $_ORNOT_
+        8   $_OR_
+       13   $_XNOR_
+        7   $_XOR_
+        2 submodules
+        1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+        1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+
+=== $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      356 wires
+      668 wire bits
+       20 public wires
+      268 public wire bits
+       15 ports
+      143 port bits
+      470 cells
+       57   $_AND_
+        3   $_DFFE_PN0P_
+       58   $_DFFE_PN1P_
+        9   $_DFF_PN0_
+       59   $_MUX_
+        1   $_NAND_
+       67   $_NOR_
+        9   $_NOT_
+        1   $_ORNOT_
+       62   $_OR_
+       93   $_XNOR_
+       51   $_XOR_
+
+=== $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      131 wires
+      352 wire bits
+       18 public wires
+      171 public wire bits
+       12 ports
+       83 port bits
+      256 cells
+        3   $_ANDNOT_
+       20   $_AND_
+        8   $_DFFE_PN0P_
+       58   $_DFFE_PN1P_
+        9   $_DFF_PN0_
+        4   $_NAND_
+        2   $_NOR_
+        1   $_NOT_
+        1   $_ORNOT_
+       64   $_OR_
+       69   $_XNOR_
+       17   $_XOR_
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+     1513 scrambler_apb
+      785 $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+      256   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+      470   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+
+        +----------Count including submodules.
+        | 
+     1177 wires
+     2544 wire bits
+      110 public wires
+     1330 public wire bits
+       53 ports
+      418 port bits
+        - memories
+        - memory bits
+        - processes
+     1513 cells
+       17   $_ANDNOT_
+      365   $_AND_
+       47   $_DFFE_PN0P_
+      174   $_DFFE_PN1P_
+       20   $_DFF_PN0_
+       59   $_MUX_
+      305   $_NAND_
+      109   $_NOR_
+       11   $_NOT_
+       22   $_ORNOT_
+      134   $_OR_
+      175   $_XNOR_
+       75   $_XOR_
+        1 submodules
+        1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+
+6.25. Executing CHECK pass (checking for obvious problems).
+Checking module scrambler_apb...
+Checking module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top...
+Checking module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core...
+Checking module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core...
+Found and reported 0 problems.
+
+7. Executing CHECK pass (checking for obvious problems).
+Checking module scrambler_apb...
+Checking module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top...
+Checking module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core...
+Checking module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core...
+Found and reported 0 problems.
+
+8. Printing statistics.
+
+=== scrambler_apb ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       20 wires
+      172 wire bits
+       19 public wires
+      171 public wire bits
+       15 ports
+       98 port bits
+        2 cells
+        2   $_AND_
+        1 submodules
+        1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+
+=== $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      670 wires
+     1352 wire bits
+       53 public wires
+      720 public wire bits
+       11 ports
+       94 port bits
+      785 cells
+       14   $_ANDNOT_
+      286   $_AND_
+       36   $_DFFE_PN0P_
+       58   $_DFFE_PN1P_
+        2   $_DFF_PN0_
+      300   $_NAND_
+       40   $_NOR_
+        1   $_NOT_
+       20   $_ORNOT_
+        8   $_OR_
+       13   $_XNOR_
+        7   $_XOR_
+        2 submodules
+        1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+        1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+
+=== $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      356 wires
+      668 wire bits
+       20 public wires
+      268 public wire bits
+       15 ports
+      143 port bits
+      470 cells
+       57   $_AND_
+        3   $_DFFE_PN0P_
+       58   $_DFFE_PN1P_
+        9   $_DFF_PN0_
+       59   $_MUX_
+        1   $_NAND_
+       67   $_NOR_
+        9   $_NOT_
+        1   $_ORNOT_
+       62   $_OR_
+       93   $_XNOR_
+       51   $_XOR_
+
+=== $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      131 wires
+      352 wire bits
+       18 public wires
+      171 public wire bits
+       12 ports
+       83 port bits
+      256 cells
+        3   $_ANDNOT_
+       20   $_AND_
+        8   $_DFFE_PN0P_
+       58   $_DFFE_PN1P_
+        9   $_DFF_PN0_
+        4   $_NAND_
+        2   $_NOR_
+        1   $_NOT_
+        1   $_ORNOT_
+       64   $_OR_
+       69   $_XNOR_
+       17   $_XOR_
+
+=== design hierarchy ===
+
+        +----------Count including submodules.
+        | 
+     1513 scrambler_apb
+      785 $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+      256   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+      470   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+
+        +----------Count including submodules.
+        | 
+     1177 wires
+     2544 wire bits
+      110 public wires
+     1330 public wire bits
+       53 ports
+      418 port bits
+        - memories
+        - memory bits
+        - processes
+     1513 cells
+       17   $_ANDNOT_
+      365   $_AND_
+       47   $_DFFE_PN0P_
+      174   $_DFFE_PN1P_
+       20   $_DFF_PN0_
+       59   $_MUX_
+      305   $_NAND_
+      109   $_NOR_
+       11   $_NOT_
+       22   $_ORNOT_
+      134   $_OR_
+      175   $_XNOR_
+       75   $_XOR_
+        1 submodules
+        1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+
+9. Executing FLATTEN pass (flatten design).
+Deleting now unused module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top.
+Deleting now unused module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core.
+Deleting now unused module $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core.
+<suppressed ~3 debug messages>
+
+10. Executing OPT pass (performing simple optimizations).
+
+10.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+<suppressed ~2 debug messages>
+
+10.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 1516 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Computing hashes of 1515 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+10.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \scrambler_apb..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+10.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \scrambler_apb.
+Performed a total of 0 changes.
+
+10.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 1515 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Removed a total of 0 cells.
+
+10.6. Executing OPT_SHARE pass.
+
+10.7. Executing OPT_DFF pass (perform DFF optimizations).
+
+10.8. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Removed 0 unused cells and 1 unused wires.
+<suppressed ~1 debug messages>
+
+10.9. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+
+10.10. Rerunning OPT passes. (Maybe there is more to do..)
+
+10.11. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \scrambler_apb..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+10.12. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \scrambler_apb.
+Performed a total of 0 changes.
+
+10.13. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 1515 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Removed a total of 0 cells.
+
+10.14. Executing OPT_SHARE pass.
+
+10.15. Executing OPT_DFF pass (perform DFF optimizations).
+
+10.16. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+
+10.17. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+
+10.18. Finished fast OPT passes. (There is nothing left to do.)
+
+11. Executing TECHMAP pass (map to technology primitives).
+
+11.1. Executing Verilog-2005 frontend: /mnt/c/Yosys/oss-cad-suite/lib/../share/yosys/techmap.v
+Parsing Verilog input from `/mnt/c/Yosys/oss-cad-suite/lib/../share/yosys/techmap.v' to AST representation.
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu_brent_kung'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `$__div_mod_u'.
+Generating RTLIL representation for module `$__div_mod_trunc'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `$__div_mod_floor'.
+Generating RTLIL representation for module `\_90_divfloor'.
+Generating RTLIL representation for module `\_90_modfloor'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_demux'.
+Generating RTLIL representation for module `\_90_lut'.
+Generating RTLIL representation for module `$connect'.
+Generating RTLIL representation for module `$input_port'.
+Successfully finished Verilog frontend.
+
+11.2. Continuing TECHMAP pass.
+No more expansions possible.
+<suppressed ~77 debug messages>
+
+12. Executing OPT pass (performing simple optimizations).
+
+12.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+
+12.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 1515 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Removed a total of 0 cells.
+
+12.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \scrambler_apb..
+  Creating internal representation of mux trees.
+  No muxes found in this module.
+Removed 0 multiplexer ports.
+
+12.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \scrambler_apb.
+Performed a total of 0 changes.
+
+12.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\scrambler_apb'.
+Computing hashes of 1515 cells of `\scrambler_apb'.
+Finding duplicate cells in `\scrambler_apb'.
+Removed a total of 0 cells.
+
+12.6. Executing OPT_SHARE pass.
+
+12.7. Executing OPT_DFF pass (perform DFF optimizations).
+
+12.8. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+
+12.9. Executing OPT_EXPR pass (perform const folding).
+Optimizing module scrambler_apb.
+
+12.10. Finished fast OPT passes. (There is nothing left to do.)
+
+13. Executing ABC pass (technology mapping using ABC).
+
+13.1. Extracting gate netlist of module `\scrambler_apb' to `<abc-temp-dir>/input.blif'..
+
+13.1.1. Executed ABC.
+Extracted 1271 gates and 1536 wires to a netlist network with 265 inputs and 214 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: UC Berkeley, ABC 1.01 (compiled Jul 11 2026 03:57:20)
+ABC: abc 01> empty
+ABC: abc 01> source <abc-temp-dir>/abc.script
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+ABC: 
+ABC: YOSYS_ABC_DONE 
+
+13.1.2. Re-integrating ABC results.
+ABC RESULTS:               AND cells:      305
+ABC RESULTS:               MUX cells:       58
+ABC RESULTS:              NAND cells:      328
+ABC RESULTS:               NOR cells:      102
+ABC RESULTS:               NOT cells:       21
+ABC RESULTS:                OR cells:      119
+ABC RESULTS:              XNOR cells:      172
+ABC RESULTS:               XOR cells:       80
+ABC RESULTS:        internal signals:     1057
+ABC RESULTS:           input signals:      265
+ABC RESULTS:          output signals:      214
+Removing temp directory.
+Removing global temp directory.
+
+14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \scrambler_apb..
+Removed 0 unused cells and 1397 unused wires.
+<suppressed ~26 debug messages>
+
+15. Printing statistics.
+
+=== scrambler_apb ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     1229 wires
+     2421 wire bits
+       85 public wires
+     1277 public wire bits
+       15 ports
+       98 port bits
+     1429 cells
+      305   $_AND_
+       47   $_DFFE_PN0P_
+      174   $_DFFE_PN1P_
+       20   $_DFF_PN0_
+       58   $_MUX_
+      328   $_NAND_
+      102   $_NOR_
+       21   $_NOT_
+      119   $_OR_
+      172   $_XNOR_
+       80   $_XOR_
+        3   $scopeinfo
+
+16. Executing LTP pass (find longest path).
+
+Longest topological path in scrambler_apb (length=16):
+    0: \scrambler_top_inst.test_counter [1]
+    1: $abc$5091$new_n566 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5178)
+    2: $abc$5091$new_n567 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5179)
+    3: $abc$5091$new_n568 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5180)
+    4: $abc$5091$new_n569 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5181)
+    5: $abc$5091$new_n570 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5182)
+    6: $abc$5091$new_n571 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5183)
+    7: $abc$5091$new_n572 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5184)
+    8: $abc$5091$new_n573 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5185)
+    9: $abc$5091$new_n574 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5186)
+   10: $abc$5091$new_n575 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5187)
+   11: $abc$5091$new_n576 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5188)
+   12: $abc$5091$new_n577 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5189)
+   13: $abc$5091$new_n578 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5190)
+   14: $abc$5091$new_n649 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5261)
+   15: $abc$5091$new_n650 (via $abc$5091$auto$blifparse.cc:397:parse_blif$5262)
+   16: $abc$5091$flatten\scrambler_top_inst.$0\test_counter[15:0][14] (via $abc$5091$auto$blifparse.cc:397:parse_blif$5263)
+   ff: \scrambler_top_inst.test_counter [14] (via $flatten\scrambler_top_inst.$auto$ff.cc:337:slice$1753)
+
+17. Executing Verilog backend.
+
+17.1. Executing BMUXMAP pass.
+
+17.2. Executing DEMUXMAP pass.
+Dumping module `\scrambler_apb'.
+
+18. Executing JSON backend.
+
+Warnings: 1 unique messages, 2 total
+End of script. Logfile hash: 3d6ecf9286, time: 1.96s, user: 0.33s, system: 0.07s, MEM: 24.00 MB peak
+Yosys 0.67+24 (git sha1 0e82bbefe, Release, Clang /usr/bin/clang++ 18.1.8)
+Time spent: 71% 2x abc (0 sec), 5% 21x opt_clean (0 sec), ...

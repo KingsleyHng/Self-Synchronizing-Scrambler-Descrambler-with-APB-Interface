@@ -30,14 +30,6 @@ module scrambler_apb #(
     output logic                     dout_valid
 );
 
-typedef enum logic [1:0]{
-  IDLE,
-  SETUP,
-  ACCESS
-} state;
-
-state cur_state, next_state;
-
 logic[7:0] csr_addr;
 logic csr_wr;
 logic[31:0] csr_wdata;
@@ -50,11 +42,38 @@ initial begin
   end
 end
 
-assign pslverr = 0;
+// ---------------------------------------------------------------------------
+// Zero-wait-state APB slave: no state needed.
+//
+// psel/penable already encode the phase completely -- SETUP is (psel &&
+// !penable), ACCESS is (psel && penable) -- so a slave that never stalls has
+// nothing left to remember. This used to be a 3-state FSM whose state names
+// lagged the bus by one cycle (its "SETUP" state was asserted while the bus
+// was in ACCESS), and csr_wr was qualified with `cur_state == SETUP` on top of
+// penable. That extra term was tautological: APB guarantees penable is only
+// ever raised the cycle after (psel && !penable) -- see the
+// APB_INPUT_SETUP_TO_ACCESS_M assume below -- and every transition out of
+// (psel && !penable) landed in that state. Synthesis could not prove it away,
+// because the proof needs the assume and synthesis does not read assumes, so
+// the two flops sat in the netlist doing nothing.
+//
+// Behaviour on a protocol-legal bus is unchanged, csr_wr included, cycle for
+// cycle. It differs only if a master violates APB by raising penable without a
+// preceding SETUP cycle -- undefined behaviour for a slave either way, but
+// worth knowing: this version responds immediately, the FSM stalled a cycle.
+// ---------------------------------------------------------------------------
+assign pslverr = 1'b0;
 
-assign csr_wr = psel && (cur_state == SETUP) && penable && pwrite;
-assign csr_addr = paddr;
-assign csr_wdata = psel && (cur_state == SETUP && penable) ? pwdata : 'b0;
+assign csr_wr = psel && penable && pwrite;
+// Only the low 8 bits are decoded (CSR map is 4-byte aligned, 0x00..0x24).
+// Slicing explicitly so a wider paddr cannot silently alias onto a real
+// register -- see ADDR_IN_RANGE_A below.
+assign csr_addr = paddr[7:0];
+// Not gated. scrambler_top samples csr_wdata only under csr_wr, so zeroing it
+// between transfers bought nothing and cost 32 AND gates -- and it was gated
+// on a condition that did not quite match csr_wr's (it omitted pwrite), which
+// is exactly the kind of near-duplicate expression that rots out of sync.
+assign csr_wdata = pwdata;
 assign prdata = csr_rdata;
 
 scrambler_top #(
@@ -80,24 +99,6 @@ scrambler_top #(
 
 assign pready = 1'b1;
 
-always_comb begin
-    next_state = cur_state;
-  case(cur_state)
-    IDLE  : next_state = (psel && !penable)? SETUP : IDLE;
-    SETUP : next_state = ACCESS;
-    ACCESS: next_state = pready ? ((psel) ? SETUP : IDLE) : ACCESS;
-  endcase
-end
-
-always_ff@(posedge clk or negedge rst_n)begin
-  if(!rst_n)begin
-    cur_state <= IDLE;
-  end
-  else begin
-    cur_state <= next_state;
-  end
-end
-
 `ifdef SVA
 //SVA
 property PREADY_ALWAYS_1;
@@ -115,20 +116,26 @@ endproperty
 
 APB_CSR_WR_A: assert property(APB_CSR_WR);
 
-property APB_SETUP_BEFORE_ACCESS;
+// Replaces the old APB_SETUP_BEFORE_ACCESS / APB_STATE_NO_FORTH_STATE pair,
+// which asserted things about cur_state. With the FSM gone there is no state
+// to constrain; what actually matters is that the slave commits a write only
+// in ACCESS. This is the property the `cur_state == SETUP` term used to
+// provide, stated directly against the bus.
+property NO_WRITE_IN_SETUP;
   @(posedge clk) disable iff(!rst_n)
-    ($past(cur_state) == SETUP) |-> cur_state == ACCESS;
+    (psel && !penable) |-> !csr_wr;
 endproperty
 
-APB_SETUP_BEFORE_ACCESS_A: assert property(APB_SETUP_BEFORE_ACCESS);
+NO_WRITE_IN_SETUP_A: assert property(NO_WRITE_IN_SETUP);
 
 
-property APB_STATE_NO_FORTH_STATE;
+// Likewise: no write may be committed while the slave is not selected at all.
+property NO_WRITE_UNSELECTED;
   @(posedge clk) disable iff(!rst_n)
-    cur_state inside {IDLE, SETUP, ACCESS};
+    (!psel) |-> !csr_wr;
 endproperty
 
-APB_STATE_NO_FORTH_STATE_A: assert property(APB_STATE_NO_FORTH_STATE);
+NO_WRITE_UNSELECTED_A: assert property(NO_WRITE_UNSELECTED);
 
 property APB_INPUT_SETUP_TO_ACCESS;
   @(posedge clk) disable iff(!rst_n)
@@ -171,9 +178,14 @@ endproperty
 
 COV_READ_XFER_C: cover property(COV_READ_XFER);
 
+// Back-to-back transfers: an ACCESS immediately followed by the next SETUP,
+// with psel never dropping. Restated against the bus now that cur_state is
+// gone. This used to match 0 times -- every test drove psel low between
+// transfers -- so it was a vacuous cover; APB_B2B_TEST in
+// tb_scrambler_apb_regression.sv now drives the burst that hits it.
 property COV_BACK2BACK;
   @(posedge clk) disable iff(!rst_n)
-    (cur_state == ACCESS && psel) ##1 (cur_state == SETUP);
+    (psel && penable) ##1 (psel && !penable);
 endproperty
 
 COV_BACK2BACK_C: cover property(COV_BACK2BACK);
@@ -184,6 +196,21 @@ property PRDATA_KNOWN;
 endproperty
 
 PRDATA_KNOWN_A: assert property(PRDATA_KNOWN);
+
+// csr_addr takes paddr[7:0] only. With the default APB_ADDR_WIDTH==8 that is
+// the whole bus and this generate block produces nothing. If someone widens
+// paddr, catch an out-of-range access here rather than let it alias silently
+// onto a real register (0x0110 decoding as TEST at 0x10, say).
+generate if (APB_ADDR_WIDTH > 8) begin : g_addr_range
+  property ADDR_IN_RANGE;
+    @(posedge clk) disable iff(!rst_n)
+      psel |-> (paddr[APB_ADDR_WIDTH-1:8] == '0);
+  endproperty
+
+  ADDR_IN_RANGE_A: assert property(ADDR_IN_RANGE)
+    else $error("ADDR_IN_RANGE: paddr=%h is above the decoded 0x00..0xFF window and would alias onto 0x%02h",
+                $sampled(paddr), $sampled(paddr[7:0]));
+end endgenerate
 
 `endif
 

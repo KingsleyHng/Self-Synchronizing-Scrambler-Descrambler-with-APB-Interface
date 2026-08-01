@@ -593,6 +593,10 @@ grep "Unproven" reports/equiv.log | grep -E "dout|prdata|pready"
 
 ---
 
+> **阅读提示(2026-08-01)**:本节是**历史案例**。当时 `scrambler_apb` 里有一个三态 APB FSM,后来被证明是恒真的死逻辑并**整个删除**(理由见 `Yosys_Synthesis_Report.md` §6.4),所以下面引用的 `cur_state` 代码在当前 RTL 中已不存在,当前基线是 **944/944 proven, 0 unproven**。
+>
+> 案例本身仍然值得读——它讲的是 Yosys 的 `fsm` pass 会做什么、以及"unproven ≠ 功能错误"这个判断方法,这些与本设计是否还有 FSM 无关。`-nofsm` 也仍然保留在综合脚本里,只是目的变了:不再是锁定某种编码,而是防止**今后新增**的状态逻辑被悄悄重编码、绕过内部节点的证明覆盖。
+
 ### 7.1 症状(坑 1:FSM 重编码)
 
 第一版脚本(gate 用 `synth`,没加 `-nofsm`)跑出来:

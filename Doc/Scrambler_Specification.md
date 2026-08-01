@@ -8,7 +8,7 @@
 | **Clocking**       | Single clock domain (datapath and CSR on same clock)                        |
 | **Reset**          | Active-low, asynchronous assert / synchronous release                       |
 | **Deliverable**    | Synthesizable SystemVerilog RTL, technology-independent                     |
-| **Spec version**   | v1.0                                                                        |
+| **Spec version**   | v1.1 (2026-08-01)                                                           |
 
 ---
 
@@ -58,17 +58,30 @@ from the received data alone** — no seed, key, or side-channel needs to be exc
 
 | Parameter | Description | Default | Legal range / constraint |
 |---|---|---|---|
-| `N` | LFSR length (state register depth) | 58 | `N >= TAP_B` |
+| `N` | LFSR length (state register depth) | 58 | `32 < N <= 64` **and** `N >= TAP_B` |
 | `W` | Parallel datapath width (bits/clock) | 8 | `W < TAP_A` |
 | `TAP_A` | First (lower) feedback tap | 39 | `W < TAP_A < TAP_B` |
 | `TAP_B` | Second (upper) feedback tap | 58 | `TAP_A < TAP_B <= N` |
 | `BIT_ORDER` | Bus bit ordering (0 = LSB-first, 1 = MSB-first) | 0 | 0 or 1 |
-| `APB_ADDR_WIDTH` | APB address width | 8 | `>= 8` |
+| `APB_ADDR_WIDTH` | APB address width | 8 | `>= 8`; only `paddr[7:0]` is decoded |
 
 > Parameter legality is checked at elaboration (`$fatal`); illegal instantiations fail the build
 > rather than silently generating out-of-range logic. The tap constraints guarantee no
 > intra-window recursion, so the combinational path is fixed at **2 XOR levels** for the default
 > 8/16-bit parallel widths (no pipelining required).
+
+> **Why `N` is bounded on both sides.** The N-bit seed and state are split across a LO register
+> (bits `[31:0]`) and a HI register (bits `[N-1:32]`), so the split is only meaningful while the
+> high word is non-empty and still fits one 32-bit CSR. The two ends fail differently:
+> at `N > 64` the surplus high bits are **silently dropped** on read-back (measured at `N = 70`:
+> seed bits `[69:64]` become unreadable, with no tool warning) — this is what the elaboration check
+> catches. At `N <= 32` the slice `csr_wdata[N-33:0]` becomes a reversed/negative part-select,
+> which is a *compile-time* error and therefore fires before the run-time `$fatal` is ever reached.
+> Both ends fail loudly; only the upper one relies on the explicit check.
+
+> **Address decoding.** `APB_ADDR_WIDTH` may exceed 8, but only `paddr[7:0]` is decoded (the map
+> ends at 0x24). A wider address is not silently aliased onto a real register: an assertion
+> (`ADDR_IN_RANGE_A`, generated only when `APB_ADDR_WIDTH > 8`) flags any access above 0xFF.
 
 ---
 
@@ -94,6 +107,11 @@ from the received data alone** — no seed, key, or side-channel needs to be exc
 | `pready` | out | 1 | Always 1 (zero-wait-state slave) |
 | `pslverr` | out | 1 | Always 0 (no bus error generated) |
 
+> The adapter is **stateless**: `psel`/`penable` already encode the bus phase completely
+> (SETUP = `psel & !penable`, ACCESS = `psel & penable`), so a slave that never stalls has nothing
+> to remember. Back-to-back transfers (`psel` held high across an ACCESS → SETUP boundary) are
+> supported and produce exactly one single-cycle write strobe per transfer.
+
 ### 3.3 Streaming datapath
 
 | Signal | Dir | Width | Description |
@@ -112,7 +130,8 @@ from the received data alone** — no seed, key, or side-channel needs to be exc
 ## 4. Register map (CSR)
 
 Base-relative byte offsets, 32-bit registers, 4-byte aligned. Access types: **RW** read/write,
-**RO** read-only, **W1P** write-1-pulse (event, reads 0), **W1C** write-1-to-clear (sticky).
+**RO** read-only, **W1P** write-1-pulse (event, reads 0), **W1C** write-1-to-clear (sticky),
+**RES** reserved (write-ignored / read-as-zero).
 
 | Offset | Register | Bits | Access | Description |
 |---|---|---|---|---|
@@ -123,7 +142,8 @@ Base-relative byte offsets, 32-bit registers, 4-byte aligned. Access types: **RW
 | 0x0C | `SEED_CTRL` | `[0] LOAD` | W1P | Write 1 to load the seed into the TX core |
 | | | `[1] NONZERO_OK` | RO | Seed non-zero check passed (`seed != 0`) |
 | 0x10 | `TEST` | `[0] FORCE_RST_EN` | RW | Enable periodic forced reset (test only) |
-| | | `[31:1] PERIOD` | RW | Forced-reset period |
+| | | `[16:1] PERIOD` | RW | Forced-reset period; `0` disables the timer (see below) |
+| | | `[31:17] —` | RES | Reserved: writes ignored, reads return 0 |
 | 0x14 | `STATUS` | `[0] LOCKED` | RO | Descrambler synchronized |
 | | | `[1] ALLZERO_ERR` | RO / W1C | LFSR all-zero deadlock alarm |
 | | | `[2] PARITY_ERR` | RO / W1C | State-register parity (SEU) alarm; TX/RX OR-combined |
@@ -135,6 +155,18 @@ Base-relative byte offsets, 32-bit registers, 4-byte aligned. Access types: **RW
 > The N-bit seed and state values exceed the 32-bit CSR data port, so both are split across low/high
 > address pairs. `NONZERO_OK` is computed in the wrapper (the core silently rejects a zero seed and
 > has no feedback port). W1P/W1C bits self-clear and read back 0.
+
+> **`TEST.PERIOD` is 16 bits wide.** At 100 MHz that spans 10 ns … 655 µs between forced resets,
+> which is the whole useful range for this register — its purpose is to give an oscilloscope a
+> repeatable trigger cadence, not to schedule long timers. The field was deliberately narrowed from
+> 31 bits: `PERIOD` and the internal test counter must be the same width, and that counter's carry
+> chain is the deepest logic in the design (the scramble path itself is only 2 XOR levels), so the
+> unusable high bits were setting f<sub>max</sub> for the whole IP. See §10.
+
+> **`PERIOD = 0` disables the periodic forced reset**; it does **not** mean "pulse every cycle".
+> With `FORCE_RST_EN = 1` and `PERIOD = 0` the datapath keeps running normally. Note that
+> `FORCE_RST_EN = 0` freezes the internal counter where it stands rather than clearing it, so the
+> first pulse after re-arming is not necessarily a full `PERIOD + 1` cycles away.
 
 ---
 
@@ -240,6 +272,8 @@ disturbances to the state register that occur outside the normal RTL update path
 ## 9. Constraints and limitations
 
 - **Seed must be non-zero.** Enforced by reset value and load rejection.
+- **`N` must satisfy `32 < N <= 64`** (see §2). Outside this range the CSR seed/state high-word
+  split is not representable; both ends fail at build time rather than silently.
 - **Bit order must match the link partner** and be identical on both I/O boundaries.
 - **Error multiplication.** A single bit error on the line produces multiple errors at the
   descrambler output (count related to the number of taps). Systems should provide retransmission
@@ -259,11 +293,33 @@ complexity indicators, not real PPA):
 
 | Metric | Value |
 |---|---|
-| Cells (generic gates) | 1650 |
-| Flip-flops | 274 |
-| Longest logic depth | 32 levels (32-bit test counter; ripple chain under generic mapping) |
-| Formal equivalence (netlist vs RTL) | 1011 / 1011 proven, 0 unproven |
+| Cells (generic gates) | 1429 |
+| Flip-flops | 241 |
+| Longest logic depth | 16 levels (16-bit test counter; ripple chain under generic mapping) |
+| Formal equivalence (netlist vs RTL) | 944 / 944 proven, 0 unproven |
 | Inferred latches | 0 |
+
+**The critical path is the test counter, not the datapath.** Under generic mapping the longest
+topological path runs from `test_counter[1]` to `test_counter[14]` — its ripple carry chain. The
+scramble path itself is only 2 XOR levels. Every bit removed from `TEST.PERIOD` therefore shortens
+the critical path by one level, which is why the field was narrowed to 16 bits (§4). A real
+technology has dedicated carry chains, so this depth is not an STA result; but the *relative*
+finding — the counter is far deeper than the datapath — holds regardless of technology.
+
+Progression across the 2026-08-01 optimisation pass, all measured:
+
+| Change | Cells | FFs | Depth | Equivalence |
+|---|---|---|---|---|
+| Baseline (32-bit counter) | 1673 | 274 | 32 | 1011 proven |
+| `test_counter` → 31 bits | 1635 | 273 | 31 | 1010 proven |
+| `PERIOD`/counter → 16 bits | 1480 | 243 | 16 | 948 proven |
+| APB adapter FSM removed | 1426 | 241 | 16 | 944 proven |
+| `csr_hi_word()` parametrized | 1429 | 241 | 16 | 944 proven |
+
+The flip-flops removed reconcile exactly: 30 = `test_period` (15) + `test_counter` (15); 2 = the
+APB adapter's state register. The final +3 cells is technology-mapping noise, not a logic change —
+the old and new high-word formulations were checked equivalent over 4 corner cases, 58 walking-ones
+and 20 000 random vectors with zero mismatches.
 
 Real area, timing (STA), and power require mapping to a target technology (e.g. SkyWater sky130) or an FPGA vendor flow.
 

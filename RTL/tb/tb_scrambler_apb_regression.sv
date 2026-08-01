@@ -44,8 +44,9 @@ module tb_scrambler_apb_regression();
     // MODE selects which task the initial block dispatches to. Valid values:
     // BYPASS | SCRAMBLER | DESCRAMBLER | LOOPBACK | NON_ZERO_SEED_READ |
     // FORCE_RST_PERIOD_TEST | FORCE_RST_PERIOD_TEST_DES |
-    // FORCE_RST_PERIOD_ZERO_TEST | BIT_ORDER_TEST | BACKPRESSURE_TEST |
-    // ALLZERO_ERR_TEST | PARITY_ERR_TEST | REGRESSION (runs all of the above)
+    // FORCE_RST_PERIOD_ZERO_TEST | TEST_RSVD_TEST | APB_B2B_TEST |
+    // BIT_ORDER_TEST | BACKPRESSURE_TEST | ALLZERO_ERR_TEST |
+    // PARITY_ERR_TEST | REGRESSION (runs all of the above)
     parameter MODE = "REGRESSION";
 
     // Number of valid words to fill the N-bit register = ceil(N / W).
@@ -528,7 +529,7 @@ module tb_scrambler_apb_regression();
             write_csr(8'h0c, 32'h00000001); // seed load
 
             // Arm the periodic force_rst: FORCE_RST_EN=1 (bit0), PERIOD=PERIOD (bits[31:1]).
-            write_csr(8'h10, {PERIOD[30:0], 1'b1});
+            write_csr(8'h10, {15'b0, PERIOD[15:0], 1'b1}); // PERIOD is TEST[16:1]
 
             din_valid = 1'b1; // keep streaming so state keeps moving between pulses
 
@@ -569,7 +570,7 @@ module tb_scrambler_apb_regression();
             end
 
             // --- FORCE_RST_EN=0 must stop the periodic pulsing --------------------
-            write_csr(8'h10, {PERIOD[30:0], 1'b0});
+            write_csr(8'h10, {15'b0, PERIOD[15:0], 1'b0}); // PERIOD is TEST[16:1]
 
             for (int i = 0; i < (PERIOD + 1) * 3; i++) begin
                 @(negedge clk);
@@ -608,7 +609,7 @@ module tb_scrambler_apb_regression();
          //   write_csr(8'h0c, 32'h00000001); // seed load
 
             // Arm the periodic force_rst: FORCE_RST_EN=1 (bit0), PERIOD=PERIOD (bits[31:1]).
-            write_csr(8'h10, {PERIOD[30:0], 1'b1});
+            write_csr(8'h10, {15'b0, PERIOD[15:0], 1'b1}); // PERIOD is TEST[16:1]
 
             din_valid = 1'b1; // keep streaming so state keeps moving between pulses
 
@@ -649,7 +650,7 @@ module tb_scrambler_apb_regression();
             end
 
             // --- FORCE_RST_EN=0 must stop the periodic pulsing --------------------
-            write_csr(8'h10, {PERIOD[30:0], 1'b0});
+            write_csr(8'h10, {15'b0, PERIOD[15:0], 1'b0}); // PERIOD is TEST[16:1]
 
             for (int i = 0; i < (PERIOD + 1) * 3; i++) begin
                 @(negedge clk);
@@ -805,6 +806,299 @@ module tb_scrambler_apb_regression();
 
 
 
+
+
+    task tp_chk(input logic cond, input string msg);
+        begin
+            if (cond) begin
+                $display("TEST_RSVD: PASSED || %s", msg);
+                pass_count++;
+            end else begin
+                $display("TEST_RSVD: FAILED || %s", msg);
+                error_count++;
+            end
+        end
+    endtask
+
+    // Arm TEST with test_val, watch a FIXED number of cycles, report how many
+    // force_rst pulses were seen and the gap between the first two.
+    //
+    // The window is bounded on purpose. FORCE_RST_PERIOD_TEST spins in
+    // `while (pulses_seen < NUM_PULSES)`, which is fine when PERIOD is known
+    // small -- but this task is deliberately fed values whose high bits are
+    // set, and the whole point is that a REGRESSED design would decode them as
+    // a huge PERIOD. Under `while` that regression hangs the simulation with no
+    // message; with a fixed window it reports "0 pulses" and fails cleanly.
+    task automatic tp_measure(input logic [31:0] test_val, input int obs_cycles,
+                              output int pulses, output int first_gap);
+        int since;
+        begin
+            write_csr(8'h10, test_val);
+
+            pulses = 0; first_gap = -1; since = 0;
+            din_valid = 1'b1;
+            for (int i = 0; i < obs_cycles; i++) begin
+                @(negedge clk);
+                din = $urandom;
+                @(posedge clk);
+                #1; // let force_rst settle past the NBA update
+                if (dut.scrambler_top_inst.force_rst) begin
+                    pulses++;
+                    if (pulses == 2) first_gap = since;
+                    since = 0;
+                end else begin
+                    since++;
+                end
+            end
+            din_valid = 1'b0;
+            write_csr(8'h10, 32'h00000000); // disarm before returning
+        end
+    endtask
+
+    // =====================================================================
+    // TEST_RSVD_TEST : TEST[31:17] is reserved (RAZ/WI)
+    //
+    //   PERIOD used to occupy TEST[31:1]. 31 bits @100MHz is up to 21 s per
+    //   force_rst pulse -- a setting nobody would ever program, since this
+    //   register exists to give a scope a repeatable trigger cadence. Those
+    //   unusable high bits were not free: test_counter must be as wide as
+    //   test_period, and that counter's carry chain is the deepest logic in
+    //   the design, so the high bits were setting fmax. PERIOD is now
+    //   TEST[16:1] (16 bits, 10 ns .. 655 us per pulse) and TEST[31:17] is
+    //   reserved.
+    //
+    //   Two independent things must hold, and testing only the first would
+    //   miss the bug that matters:
+    //     * readback -- the reserved bits must read back 0 no matter what was
+    //       written (RAZ/WI), so software can tell the field is 16 bits wide;
+    //     * TIMING -- writing garbage into the reserved bits must not change
+    //       the pulse cadence at all. This is the real check. If someone
+    //       widens test_period back out without widening test_counter (or
+    //       vice versa), readback can still look perfectly correct while the
+    //       timer silently stops firing.
+    //
+    //   The equivalence check at the end is what pins this down: the same
+    //   PERIOD with the reserved bits all-ones and all-zeros must produce an
+    //   identical pulse count AND an identical gap.
+    // =====================================================================
+    task TEST_RSVD_TEST();
+        localparam logic [31:0] IMPL_MASK = 32'h0001_FFFF; // TEST[16:0] implemented
+        localparam int PERIOD = 4;
+        localparam int OBS    = 40; // ~8 pulses at PERIOD=4; bounded (see above)
+        logic [31:0] rdata;
+        logic [31:0] armed_hi, armed_lo;
+        int pulses_hi, pulses_lo, gap_hi, gap_lo;
+        begin
+            $display("START TEST[31:17] RESERVED-BITS TEST");
+
+            // ---- Part 1: reserved bits read back as 0 ----------------------
+            // Both patterns deliberately have bit0 (FORCE_RST_EN) = 0, i.e. the
+            // timer stays DISARMED for the whole readback part. This matters:
+            // test_counter has no unconditional else branch -- it reloads only
+            // on a match and counts only while armed, so disarming does NOT
+            // return it to 0, it freezes wherever it was. Arming here with
+            // PERIOD=0xFFFF would park the counter at whatever it reached
+            // across these APB transactions, and the PERIOD=4 windows below
+            // would then have to count all the way around the 16-bit wrap
+            // before matching -- zero pulses inside their bounded window, for a
+            // reason that has nothing to do with what this test is about.
+            // Leaving it disarmed keeps the counter at the 0 that init() set.
+            write_csr(8'h10, 32'hFFFFFFFE);
+            apb_read(8'h10, rdata);
+            tp_chk(rdata === (32'hFFFFFFFE & IMPL_MASK),
+                   $sformatf("wrote FFFFFFFE, read %h, expected %h",
+                             rdata, 32'hFFFFFFFE & IMPL_MASK));
+
+            write_csr(8'h10, 32'hDEAD0008);
+            apb_read(8'h10, rdata);
+            tp_chk(rdata === (32'hDEAD0008 & IMPL_MASK),
+                   $sformatf("wrote DEAD0008, read %h, expected %h",
+                             rdata, 32'hDEAD0008 & IMPL_MASK));
+
+            write_csr(8'h10, 32'h00000000); // disarm before the timing part
+
+            // ---- Part 2/3: reserved bits must not affect the cadence -------
+            // Same actively-shifting setup the other PERIOD tests use. MODE is
+            // written well ahead of the measurement windows, so prev_mode==mode
+            // by then and every force_rst counted is the TEST timer's doing.
+            write_csr(8'h00, 32'h00000005); // MODE=SCRAMBLE, EN=1
+            write_csr(8'h04, 32'hDEADBEEF);
+            write_csr(8'h08, 32'h0AAAAAAA);
+            write_csr(8'h0c, 32'h00000001); // seed load
+
+            armed_lo = {15'h0000, PERIOD[15:0], 1'b1}; // reserved bits clear
+            armed_hi = {15'h7FFF, PERIOD[15:0], 1'b1}; // reserved bits all set
+
+            tp_measure(armed_hi, OBS, pulses_hi, gap_hi);
+            tp_measure(armed_lo, OBS, pulses_lo, gap_lo);
+
+            // A 31-bit PERIOD would decode armed_hi as ~0x7FFF0004 and fire
+            // nothing in this window -- this is the check that catches it.
+            tp_chk(pulses_hi >= 2,
+                   $sformatf("PERIOD=%0d with TEST[31:17]=all-ones pulsed %0d times in %0d cycles (need >=2; 0 means the reserved bits were decoded as PERIOD)",
+                             PERIOD, pulses_hi, OBS));
+
+            tp_chk(gap_hi === PERIOD,
+                   $sformatf("PERIOD=%0d with TEST[31:17]=all-ones gave gap %0d, expected %0d",
+                             PERIOD, gap_hi, PERIOD));
+
+            tp_chk((pulses_lo >= 2) && (gap_lo === PERIOD),
+                   $sformatf("PERIOD=%0d with TEST[31:17]=0 gave %0d pulses, gap %0d, expected gap %0d (reference case)",
+                             PERIOD, pulses_lo, gap_lo, PERIOD));
+
+            // The equivalence criterion is the GAP: it is the actual cadence and is
+            // independent of where in the count the window happened to open.
+            // Pulse counts are allowed to differ by one, because the two
+            // windows do not start at the same phase -- test_counter is not
+            // reset between the calls (no else branch, see Part 1), so the
+            // second window opens wherever the first one left off and can
+            // catch one extra or one fewer pulse at the edges. Demanding exact
+            // equality there would be a flaky check, not a stronger one.
+            tp_chk((gap_hi === gap_lo) &&
+                   ((pulses_hi - pulses_lo) inside {-1, 0, 1}),
+                   $sformatf("reserved bits changed the cadence: all-ones gave %0d pulses/gap %0d, all-zeros gave %0d pulses/gap %0d",
+                             pulses_hi, gap_hi, pulses_lo, gap_lo));
+        end
+    endtask
+
+
+    task b2b_chk(input logic cond, input string msg);
+        begin
+            if (cond) begin
+                $display("APB_B2B: PASSED || %s", msg);
+                pass_count++;
+            end else begin
+                $display("APB_B2B: FAILED || %s", msg);
+                error_count++;
+            end
+        end
+    endtask
+
+    // =====================================================================
+    // APB_B2B_TEST : back-to-back APB transfers (psel never drops)
+    //
+    //   Every other task here configures the DUT through write_csr(), which
+    //   ends each transfer by driving psel low -- so the bus always returns
+    //   to IDLE between accesses. Measured on the 378-pass waveform: 114
+    //   transfers, psel high for exactly 2 cycles every single time, and
+    //   COV_BACK2BACK_C matched 0 times. The ACCESS->SETUP arc had never
+    //   been exercised.
+    //
+    //   That arc is legal APB and is the only reason a zero-wait-state slave
+    //   would need state at all, so leaving it untested is the real gap:
+    //
+    //     SETUP  ACCESS SETUP  ACCESS SETUP  ACCESS
+    //     psel    1      1      1      1      1      1
+    //     penable 0      1      0      1      0      1
+    //             |<-- xfer 0 ->|<-- xfer 1 ->|<-- xfer 2 ->|
+    //
+    //   What must hold: exactly one csr_wr strobe per transfer, each exactly
+    //   one cycle wide (never merging into a multi-cycle strobe across the
+    //   boundary), every payload landing in its own register, and pready
+    //   staying high throughout -- a zero-wait-state slave may not insert
+    //   wait states just because the master kept psel asserted.
+    //
+    //   Note the checks are written against the BUS, not against cur_state:
+    //   this test must stay valid whether or not the slave keeps an FSM.
+    // =====================================================================
+    task APB_B2B_TEST();
+        localparam int B2B_N = 4;
+        logic [7:0]  addrs [0:B2B_N-1];
+        logic [31:0] datas [0:B2B_N-1];
+        logic [31:0] rdata;
+        int    wr_pulses, bad_width, pready_low;
+        int    width, idx;
+        logic  trace [0:2*B2B_N];   // csr_wr sampled once per posedge
+        begin
+            $display("START APB BACK-TO-BACK TEST");
+
+            // Writing the same register twice in one burst (0x04 first and
+            // last) checks the second write is not swallowed by the first.
+            // 0x08 is SEED_HI: only bits [N-33:0] = [25:0] exist, so the
+            // value is kept inside 26 bits to keep the readback exact.
+            // 0x10 is armed with FORCE_RST_EN=0 so the burst cannot start the
+            // periodic force_rst and disturb whatever runs next.
+            addrs[0] = 8'h04; datas[0] = 32'h12345678;
+            addrs[1] = 8'h08; datas[1] = 32'h02AAAAAA;
+            addrs[2] = 8'h10; datas[2] = 32'h00000008;
+            addrs[3] = 8'h04; datas[3] = 32'hCAFEBABE;
+
+            pready_low = 0;
+            idx        = 0;
+
+            @(negedge clk);
+            psel   = 1'b1;
+            pwrite = 1'b1;
+            for (int k = 0; k < B2B_N; k++) begin
+                // --- SETUP phase: psel stays high from the previous ACCESS
+                penable = 1'b0;
+                paddr   = addrs[k];
+                pwdata  = datas[k];
+                @(posedge clk);
+                #1;
+                trace[idx] = dut.csr_wr; idx++;
+                if (pready !== 1'b1) pready_low++;
+
+                @(negedge clk);
+                // --- ACCESS phase
+                penable = 1'b1;
+                @(posedge clk);
+                #1;
+                trace[idx] = dut.csr_wr; idx++;
+                if (pready !== 1'b1) pready_low++;
+
+                @(negedge clk);
+            end
+            psel    = 1'b0;
+            penable = 1'b0;
+            pwrite  = 1'b0;
+            @(posedge clk);
+            #1;
+            trace[idx] = dut.csr_wr; idx++;
+
+            // --- count strobes and widths from the trace -------------------
+            wr_pulses = 0; bad_width = 0; width = 0;
+            for (int i = 0; i < idx; i++) begin
+                if (trace[i]) begin
+                    width++;
+                end else if (width != 0) begin
+                    wr_pulses++;
+                    if (width != 1) bad_width++;
+                    width = 0;
+                end
+            end
+            if (width != 0) begin
+                wr_pulses++;
+                if (width != 1) bad_width++;
+            end
+
+            b2b_chk(wr_pulses === B2B_N,
+                    $sformatf("%0d csr_wr strobes across %0d back-to-back writes, expected %0d",
+                              wr_pulses, B2B_N, B2B_N));
+
+            b2b_chk(bad_width === 0,
+                    $sformatf("%0d csr_wr strobe(s) were not exactly one cycle wide -- strobes must not merge across the ACCESS->SETUP boundary",
+                              bad_width));
+
+            b2b_chk(pready_low === 0,
+                    $sformatf("pready dropped on %0d cycle(s) during the burst -- a zero-wait-state slave must not insert waits",
+                              pready_low));
+
+            // --- payloads must have landed in their own registers ----------
+            apb_read(8'h04, rdata);
+            b2b_chk(rdata === 32'hCAFEBABE,
+                    $sformatf("SEED_LO read %h, expected CAFEBABE (the LAST of two writes to 0x04 in the burst)",
+                              rdata));
+
+            apb_read(8'h08, rdata);
+            b2b_chk(rdata === 32'h02AAAAAA,
+                    $sformatf("SEED_HI read %h, expected 02AAAAAA", rdata));
+
+            apb_read(8'h10, rdata);
+            b2b_chk(rdata === 32'h00000008,
+                    $sformatf("TEST read %h, expected 00000008", rdata));
+        end
+    endtask
 
 
     task BYPASS();
@@ -1652,6 +1946,18 @@ module tb_scrambler_apb_regression();
 
             err_before = error_count; pass_before = pass_count;
             init(); repeat (10) @(posedge clk);
+            TEST_RSVD_TEST();
+            $display("--- TEST_RSVD_TEST subtotal: pass=%0d fail=%0d ---",
+                      pass_count - pass_before, error_count - err_before);
+
+            err_before = error_count; pass_before = pass_count;
+            init(); repeat (10) @(posedge clk);
+            APB_B2B_TEST();
+            $display("--- APB_B2B_TEST subtotal: pass=%0d fail=%0d ---",
+                      pass_count - pass_before, error_count - err_before);
+
+            err_before = error_count; pass_before = pass_count;
+            init(); repeat (10) @(posedge clk);
             BIT_ORDER_TEST();
             $display("--- BIT_ORDER_TEST subtotal: pass=%0d fail=%0d ---",
                       pass_count - pass_before, error_count - err_before);
@@ -1710,6 +2016,12 @@ module tb_scrambler_apb_regression();
         end
         else if(MODE == "FORCE_RST_PERIOD_ZERO_TEST")begin
             FORCE_RST_PERIOD_ZERO_TEST();
+        end
+        else if(MODE == "TEST_RSVD_TEST")begin
+            TEST_RSVD_TEST();
+        end
+        else if(MODE == "APB_B2B_TEST")begin
+            APB_B2B_TEST();
         end
         else if(MODE == "BIT_ORDER_TEST")begin
             BIT_ORDER_TEST();

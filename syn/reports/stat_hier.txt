@@ -5,18 +5,14 @@
 
         +----------Local Count, excluding submodules.
         | 
-       26 wires
-      180 wire bits
-       21 public wires
-      175 public wire bits
+       20 wires
+      172 wire bits
+       19 public wires
+      171 public wire bits
        15 ports
        98 port bits
-       42 cells
-        2   $_ANDNOT_
-       35   $_AND_
-        2   $_DFFE_PN0P_
-        2   $_NAND_
-        1   $_ORNOT_
+        2 cells
+        2   $_AND_
         1 submodules
         1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
 
@@ -24,24 +20,25 @@
 
         +----------Local Count, excluding submodules.
         | 
-      752 wires
-     1325 wire bits
-       50 public wires
-      592 public wire bits
+      670 wires
+     1352 wire bits
+       53 public wires
+      720 public wire bits
        11 ports
        94 port bits
-      917 cells
-       31   $_ANDNOT_
-      329   $_AND_
-       35   $_DFFE_PN0P_
+      785 cells
+       14   $_ANDNOT_
+      286   $_AND_
+       36   $_DFFE_PN0P_
        58   $_DFFE_PN1P_
-       34   $_DFF_PN0_
-      313   $_NAND_
-       32   $_NOR_
-       40   $_ORNOT_
-       23   $_OR_
-       14   $_XNOR_
-        8   $_XOR_
+        2   $_DFF_PN0_
+      300   $_NAND_
+       40   $_NOR_
+        1   $_NOT_
+       20   $_ORNOT_
+        8   $_OR_
+       13   $_XNOR_
+        7   $_XOR_
         2 submodules
         1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
         1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
@@ -50,84 +47,84 @@
 
         +----------Local Count, excluding submodules.
         | 
-      353 wires
-      665 wire bits
+      356 wires
+      668 wire bits
        20 public wires
       268 public wire bits
        15 ports
       143 port bits
-      467 cells
-       56   $_AND_
+      470 cells
+       57   $_AND_
         3   $_DFFE_PN0P_
        58   $_DFFE_PN1P_
         9   $_DFF_PN0_
        59   $_MUX_
-        2   $_NAND_
+        1   $_NAND_
        67   $_NOR_
         9   $_NOT_
         1   $_ORNOT_
-       61   $_OR_
-       91   $_XNOR_
+       62   $_OR_
+       93   $_XNOR_
        51   $_XOR_
 
 === $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core ===
 
         +----------Local Count, excluding submodules.
         | 
-      148 wires
-      369 wire bits
+      131 wires
+      352 wire bits
        18 public wires
       171 public wire bits
        12 ports
        83 port bits
-      273 cells
-        2   $_ANDNOT_
-       28   $_AND_
+      256 cells
+        3   $_ANDNOT_
+       20   $_AND_
         8   $_DFFE_PN0P_
        58   $_DFFE_PN1P_
         9   $_DFF_PN0_
-       13   $_NAND_
+        4   $_NAND_
         2   $_NOR_
         1   $_NOT_
         1   $_ORNOT_
-       72   $_OR_
-       55   $_XNOR_
-       24   $_XOR_
+       64   $_OR_
+       69   $_XNOR_
+       17   $_XOR_
 
 === design hierarchy ===
 
         +----------Count including submodules.
         | 
-     1699 scrambler_apb
-      917 $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
-      273   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
-      467   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
+     1513 scrambler_apb
+      785 $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
+      256   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\descrambler_core
+      470   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_core
 
         +----------Count including submodules.
         | 
-     1279 wires
-     2539 wire bits
-      109 public wires
-     1206 public wire bits
+     1177 wires
+     2544 wire bits
+      110 public wires
+     1330 public wire bits
        53 ports
       418 port bits
         - memories
         - memory bits
         - processes
-     1699 cells
-       35   $_ANDNOT_
-      448   $_AND_
-       48   $_DFFE_PN0P_
+     1513 cells
+       17   $_ANDNOT_
+      365   $_AND_
+       47   $_DFFE_PN0P_
       174   $_DFFE_PN1P_
-       52   $_DFF_PN0_
+       20   $_DFF_PN0_
        59   $_MUX_
-      330   $_NAND_
-      101   $_NOR_
-       10   $_NOT_
-       43   $_ORNOT_
-      156   $_OR_
-      160   $_XNOR_
-       83   $_XOR_
+      305   $_NAND_
+      109   $_NOR_
+       11   $_NOT_
+       22   $_ORNOT_
+      134   $_OR_
+      175   $_XNOR_
+       75   $_XOR_
         1 submodules
         1   $paramod$c9efeda027fc3d4256c20c1d70297742886506f1\scrambler_top
 
